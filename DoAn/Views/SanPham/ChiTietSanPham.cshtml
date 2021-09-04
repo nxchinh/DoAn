@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "ChiTietSanPham";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+    var product = (DoAn.Models.EF.SanPham)@ViewBag.SanPham;
+}
+
+@model List<DoAn.Models.Model.NguoiDung.DanhGiaModel>
+<div class="container">
+    <div class="row">
+        <div class="col-xl-3 col-md-3 ctsp-left">
+            <img src="@Url.Content("~/images/"+product.Anh)" />
+        </div>
+        <div class="col-xl-5 col-md-5 ctsp-center">
+            <div class="ctsp-tt">
+                <br />
+                <br />
+                <span class="ctsp-tensp">@product.TenSanPham</span> <br />
+
+                <span class="ctsp-giaban">@($"{@product.GiaBan:0,0}")đ</span>
+                <span class="ctsp-khuyenmai">@String.Format("{0:0,0}", @product.KhuyenMai)đ</span>
+
+            </div>
+            <br />
+            <div class="ctsp-danhgiasao">
+                <div class="danhgiasao">
+                    <span class="title">Đánh giá sản phẩm của người dùng</span>
+                </div>
+                <form id="rating-form">
+                    <span class="rating-star">
+                        @if (@ViewBag.Star == 0)
+                        {
+
+
+                        }
+
+                        @if (@ViewBag.Star == 1)
+                        {
+
+                            <form id="rating-form">
+                                <span class="rating-star">
+                                    <input type="radio" name="rating" value="5" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="4" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="3" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="2" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="1" disabled checked><span class="star"></span>
+                                </span>
+                            </form>
+                        }
+                        @if (@ViewBag.Star == 2)
+                        {
+
+                            <form id="rating-form">
+                                <span class="rating-star">
+                                    <input type="radio" name="rating" value="5" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="4" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="3" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="2" checked disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="1" disabled><span class="star"></span>
+                                </span>
+                            </form>
+                        }
+                        @if (@ViewBag.Star == 3)
+                        {
+
+                            <form id="rating-form">
+                                <span class="rating-star">
+                                    <input type="radio" name="rating" value="5" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="4" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="3" checked disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="2" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="1" disabled><span class="star"></span>
+                                </span>
+                            </form>
+                        }
+                        @if (@ViewBag.Star == 4)
+                        {
+
+                            <form id="rating-form">
+                                <span class="rating-star">
+                                    <input type="radio" name="rating" value="5" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="4" checked disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="3" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="2" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="1" disabled><span class="star"></span>
+                                </span>
+                            </form>
+                        }
+
+                        @if (@ViewBag.Star == 5)
+                        {
+
+                            <form id="rating-form">
+                                <span class="rating-star">
+                                    <input type="radio" name="rating" value="5" checked disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="4"  disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="3" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="2" disabled><span class="star"></span>
+
+                                    <input type="radio" name="rating" value="1" disabled><span class="star"></span>
+                                </span>
+                            </form>
+                        }
+
+
+                    </span>
+                </form>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-4 ctsp-right">
+            <br />
+            <div class="binhluancuaban">
+                <div class="title">
+                    <span>Bình luận của bạn</span>
+                </div>
+                <div class="content">
+
+                    <div class="stars">
+                        <form action="">
+                            <input class="star star-5" id="star-5" type="radio" name="star" value="5" />
+                            <label class="star star-5" for="star-5"></label>
+                            <input class="star star-4" id="star-4" type="radio" name="star" value="4" />
+                            <label class="star star-4" for="star-4"></label>
+                            <input class="star star-3" id="star-3" type="radio" name="star" value="3" />
+                            <label class="star star-3" for="star-3"></label>
+                            <input class="star star-2" id="star-2" type="radio" name="star" value="2" />
+                            <label class="star star-2" for="star-2"></label>
+                            <input class="star star-1" id="star-1" type="radio" name="star" value="1" />
+                            <label class="star star-1" for="star-1"></label>
+                        </form>
+                    </div>
+                    <textarea id="text-noidung" rows="3" class="form-control"></textarea>
+                    <input type="text" name="name" value="" id="input-star" style="display:none;" />
+                    <input type="text" name="input-masanpham" value="@product.Id" style="display:none;" id="input-masanpham" /> <br />
+                    <button class="btn btn-primary" id="btn-danhgia">Đánh giá </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xl-8 col-md-8">
+            <div class="danhsachbinhluan">
+                <div class="title">
+                    <span>Nhận xét của khách hàng về sản phẩm</span>
+                </div>
+                <table width="100%" class="table table-condensed">
+                    @foreach (var item in Model)
+                    {
+                        <tr width="100%">
+                            <td width="20%"><span>@item.TenDangNhap</span></td>
+                            <td width="60%"><span>@item.NoiDung</span></td>
+                            <td width="20%"><span>@item.ThoiGian </span></td>
+                        </tr>
+                    }
+
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section danhgiasanpham{
+    <script>
+
+    $('#btn-danhgia').click(function () {
+        $('input[name="star"]:checked').each(function (i) {
+            $('#input-star').val($(this).val());
+        });
+        var noidung = $('#text-noidung').val();
+        var sosao = $('#input-star').val();
+        var masanpham = $('#input-masanpham').val();
+        window.location.href = '/DanhGia/Insert?sosao=' + sosao + '&masanpham=' + masanpham + '&noidung=' + noidung;
+
+    });
+
+    </script>
+}
+
+

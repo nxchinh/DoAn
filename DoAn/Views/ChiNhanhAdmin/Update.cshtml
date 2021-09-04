@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+@model DoAn.Models.Model.Admin.ChiNhanhModel
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Sửa chi nhánh</h4>
+        </div>
+        <form asp-action="Update" asp-controller="ChiNhanhAdmin" method="post">
+            <div class="modal-body">
+
+                <input type="text" class="form-control" id="idchinhanh" placeholder="" style="display:none;" />
+                <div class="form-group row">
+                    <label for="NoiDung" class="col-md-3">Tên sản phẩm</label>
+                    <input asp-for="TenChiNhanh" type="text" class="form-control col-md-8" id="tenchinhanh" placeholder="tên chi nhánh" />
+                    <div class="col-md-1"></div>
+                </div>
+                <div class="form-group row">
+                    <label for="GiaBan" class="col-md-3">Địa chỉ</label>
+                    <input asp-for="DiaChi" type="text" class="form-control col-md-8" id="diachichinhanh" placeholder="địa chỉ" />
+                    <div class="col-md-1"></div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+

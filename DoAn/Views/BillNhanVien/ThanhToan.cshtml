@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "ThanhToan";
+    Layout = "~/Views/Shared/NhanVien.cshtml";
+}
+
+@model List<DoAn.Models.Model.NhanVien.CTHDBanModel>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="thanhtoan-hd">
+                <br />
+                <span>CHI TIẾT HÓA ĐƠN</span>
+
+            </div>
+            <br />
+            <table class="table table-bordered">
+
+                <tr>
+                    <th class="table-center">STT</th>
+                    <th class="table-center">Tên sản phẩm</th>
+                    <th class="table-center">Giá bán</th>
+                    <th class="table-center">Số lượng</th>
+                    <th class="table-center">Thành tiền</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td class="table-center">
+                            @if (item.STT != 0)
+                            {
+                                @item.STT
+                            }
+
+                        </td>
+                        <td class="table-bold">@item.TenSanPham</td>
+                        <td class="table-center">
+                            @if (item.GiaBan == 0)
+                            {
+                                <span>0đ</span>
+                            }
+                            else
+                            {
+                                <span>@String.Format("{0:0,0}", @item.GiaBan)đ</span>
+                            }
+                        </td>
+                        <td class="table-center">@item.SoLuong</td>
+                        <td class="table-center">
+                            @if (item.ThanhTien == 0)
+                            {
+                                <span>0đ</span>
+                            }
+                            else
+                            {
+                                <span>@String.Format("{0:0,0}", @item.ThanhTien)đ</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="table-center">Tổng tiền</td>
+                    <td class="table-center">
+                        @String.Format("{0:0,0}", @Model.Sum(x => x.ThanhTien))đ
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-3">
+            <br />
+            <br />
+            <br />
+            <a href="/BillNhanVien/SuaThanhToanOffline_NhanVien?mahdb=@ViewBag.MaHoaDon" class="btn btn-primary">Tiếp tục bán</a>
+        </div>
+    </div>
+</div>
+
+
+
+

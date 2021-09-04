@@ -1,0 +1,267 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.HoaDonBanModel
+<div class="container">
+    <div class="danhsachsanpham">
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-8 row">
+                <h4>Danh sách hóa đơn chưa duyệt</h4>
+            </div>
+            <div class="col-md-3">
+                <a href="/HoaDonBanAdmin/IndexDuyet" class="btn btn-primary" id="btn-hoadondaduyet">Hóa đơn đã duyệt</a>
+
+            </div>
+        </div>
+        <hr />
+        <br />
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="10%">
+                        Ngày bán
+                    </th>
+                    <th width="15%">
+                        Tên khách
+                    </th>
+                    <th width="20%">
+                        Địa chỉ
+                    </th>
+                    <th width="15%">
+                        Điện thoại
+                    </th>
+                    <th width="15%">
+                        Khuyến mãi
+                    </th>
+                    <th width="15%">
+                        Tổng tiền
+                    </th>
+                    <th width="15%">
+                        Duyệt
+                    </th>
+
+
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+@section hoadonbanadmin{
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function (e) {
+            loaddata(1);
+
+        });
+
+        function loaddata(page) {
+
+            $.ajax({
+                url: "/HoaDonBanAdmin/List",
+                type: "GET",
+                data: { page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="10%">' + item.NgayBanShow + '</td>';
+                        html += '<td width="15%"  class="table-center"> ' + item.TenDangNhap + ' </td>';
+                        html += '<td width="20%">' + item.DiaChi + '</td>';
+                        html += '<td width="15%">' + item.SDT + '</td>';
+
+                        if (item.KhuyenMai == "") {
+                            html += '<td width="15%" >0</td>';
+                        } else {
+                            html += '<td width="15%" >' + item.KhuyenMai + 'đ</td>';
+                        }
+                        html += '<td width="15%" >' + item.TongTienShow + 'đ</td>';
+                        if (item.Status == 0) {
+                            html += '<td width="15%">  <a href="/HoaDonBanAdmin/Update/' + item.Id + '"     class="btn btn-danger" ">Duyệt</a> </td>';
+                        }
+                        else {
+                            html += '<td width="15%" class="btn-success">đã duyệt</td>';
+                        }
+
+                        html += '</tr>';
+                        var paginationString = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            paginationString += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i === pageCurrent) {
+                                paginationString += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                paginationString += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            paginationString += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(paginationString);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+
+            loaddata(page)
+
+
+        });
+        function getbyID(masanpham) {
+            $.ajax({
+                url: "/HoaDonBanAdmin/GetbyID/" + masanpham,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    $('#idhoadonbanadmin').val(result.Id);
+                    $('#tenkhachhang').val(result.TenDangNhap);
+                    $('#emailkhachhang').val(result.Email);
+                    $('#diachikhachhang').val(result.DiaChi);
+                    $('#sdtkhachhang').val(result.SDT);
+                    $('#tongtienhoadon').val(result.TongTien);
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+
+        }
+
+        $('#btnUpdate').click(function () {
+
+            var machinhanh = $("#MaChiNhanh").find(":selected").val();
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                Id: $('#idhoadonbanadmin').val(),
+                MaChiNhanh: machinhanh
+            };
+            $.ajax({
+                url: "/HoaDonBanAdmin/Update/",
+                type: "POST",
+                data: JSON.stringify(empObj),
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    loaddata(1);
+                    alert('Bạn đã duyệt thành công');
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+
+
+        });
+
+
+
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#tenkhachhang').val() == "") {
+                $('#tenkhachhang').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#tenkhachhang').css('border-color', 'lightgrey');
+            }
+
+
+            if ($('#diachikhachhang').val() == "") {
+                $('#diachikhachhang').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#diachikhachhang').css('border-color', 'lightgrey');
+            }
+
+
+            if ($('#emailkhachhang').val() == "") {
+                $('#emailkhachhang').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#emailkhachhang').css('border-color', 'lightgrey');
+            }
+
+
+
+            var maloai = $("#MaChiNhanh").find(":selected").val();
+            if (maloai == "") {
+
+                isValid = false;
+            }
+            else {
+
+            }
+
+
+            if ($('#sdtkhachhang').val() == "") {
+                $('#sdtkhachhang').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#sdtkhachhang').css('border-color', 'lightgrey');
+            }
+
+            return isValid;
+        }
+    </script>
+
+}
+

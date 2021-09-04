@@ -1,0 +1,23 @@
+﻿@model List<DoAn.Models.Model.Admin.PhanHoiModel>
+<div class="dropdown for-message">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-envelope"></i>
+        <span class="count bg-primary">
+            @Model.Count
+        </span>
+    </button>
+    <hr />
+    <div class="dropdown-menu" aria-labelledby="message">
+        <p class="red">@Model.Count phản hồi chưa đọc</p>
+        @foreach (var item in Model)
+        {
+            <a class="dropdown-item media" href="/PhanHoiAdmin/Index">
+                <div class="message media-body">
+                    <span class="name float-left">@item.UserName</span>
+                    <span class="time float-right">@item.PhanHoiTu</span>
+                </div>
+            </a>
+        }
+
+    </div>
+</div>

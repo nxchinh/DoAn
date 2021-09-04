@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+<main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-xs-12  col-sm-12 col-12">
+                <img src="~/images/banner-sanpham.jpg" width="100%" />
+            </div>
+        </div>
+    </div>
+    <div class="main-sp">
+        <div class="container">
+            @await Component.InvokeAsync("Latte")
+
+            @await Component.InvokeAsync("DacBietEstore")
+
+            @await Component.InvokeAsync("TraSua")
+
+            @await Component.InvokeAsync("TraNguyenChat")
+
+            @await Component.InvokeAsync("SangTao")
+
+            @await Component.InvokeAsync("DaXay")
+
+            @await Component.InvokeAsync("Topping")
+
+
+        </div>
+    </div>
+</main>
+
+

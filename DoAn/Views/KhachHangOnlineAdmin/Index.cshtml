@@ -1,0 +1,272 @@
+﻿
+@{ ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/Admin.cshtml"; }
+<!--STYLE-->
+<style>
+    /*EXCEL*/
+    .select_export_excel_border {
+        border: 0px solid;
+        text-align: center;
+        width: 72px;
+        height: 35px;
+        padding: 5px;
+        background: #058905;
+        float: left;
+    }
+    .elements {
+        border: 0px solid;
+        text-align: center;
+        width: 72px;
+        height: 35px;
+        padding: 5px;
+        float: left;
+        margin-left: 7px;
+        background: #63cc63;
+        color: white;
+        padding: 10px;
+    }
+    .elements2 {
+        border: 0px solid;
+        text-align: center;
+        width: 72px;
+        height: 35px;
+        padding: 5px;
+        float: left;
+        margin-left: 7px;
+        background: #51b0df;
+        color: white;
+        padding: 10px;
+    }
+    /*CSV*/
+    .select_export_csv_border {
+        border: 0px solid;
+        text-align: center;
+        width: 72px;
+        height: 35px;
+        padding: 5px;
+        background: #0784c2;
+        float: left;
+        margin-left: 7px;
+    }
+
+    .hover_select_export_csv_border:hover {
+        background: #51b0df;
+    }
+    /*PRINT*/
+    .select_export_print_border {
+        border: 0px solid;
+        text-align: center;
+        width: 72px;
+        height: 35px;
+        padding: 5px;
+        background: #747070;
+        float: left;
+        margin-left: 7px;
+    }
+
+    .hover_select_export_print_border:hover {
+        background: #a59f9f;
+    }
+    /*Border*/
+    .div_boder_payment {
+        padding-top: 22px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid #c9c9c9;
+        font-size: 11px;
+        border-color: #ddd;
+    }
+</style>
+<div class="container">
+    <hr />
+    <div class="danhsachsanpham">
+        <div>
+            <h4>Danh sách khách hàng online</h4>
+        </div>
+
+        <hr/>
+        <div style="margin: 10px; padding: 10px;">
+            <a href="@Url.Action("Excel", "KhachHangOnlineAdmin")" class="elements">
+                <span>Excel</span>
+            </a>
+            <a href="@Url.Action("CSV", "KhachHangOnlineAdmin")" class="elements2">
+                <span>CSV</span>
+            </a>
+            <button onClick="printdiv('div_print');" class="btn" style="background-color: #a59f9f; font-weight: bold; color: white; text-decoration: none; margin-left: 3px;padding-top: 22px;padding-bottom: 22px;border-bottom: 1px solid #c9c9c9;font-size: 11px;border-color: #ddd;">Print</button>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10 row">
+                <div class="col-md-1"></div>
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7"/>
+                <div class="col-md-2"><button type="button" class="btn btn-warning" id="search">Tìm kiếm</button></div>
+
+                <div class="col-md-2"></div>
+            </div>
+
+        </div>
+
+        <br/>
+        <div id="div_print">
+
+            <table  class="table table-bordered table-hover" width="100%">
+                <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Tên đăng nhập
+                    </th>
+                    <th width="15%">
+                        Email
+                    </th>
+                    <th width="15%">
+                        Điện thoại
+                    </th>
+                    <th width="20%">
+                        Địa chỉ
+                    </th>
+
+                    <th width="15%">
+
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="tbody"></tbody>
+            </table>
+
+        </div>
+
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+@section khachhang{
+    <script language="javascript">
+        function printdiv(printpage) {
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body>";
+            var newstr = document.all.item(printpage).innerHTML;
+            var oldstr = document.body.innerHTML;
+            document.body.innerHTML = headstr + newstr + footstr;
+            window.print();
+            document.body.innerHTML = oldstr;
+            return false;
+        }
+    </script>
+    <script>
+        $(document).ready(function (e) {
+
+            loaddata(null, 1);
+        });
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/KhachHangOnlineAdmin/List",
+                type: "GET",
+                data: { txtSearch: txtSeach, page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="20%">' + item.TenDangNhap + '</td>';
+                        html += '<td width="25%">' + item.Email + '</td>';
+                        html += '<td width="20%">' + item.SDT + '</td>';
+                        html += '<td width="30%"  class="table-center">' + item.DiaChi + '</td>';
+                        html += '<td width="15%">   <a href="#"   onclick="Delele(' + item.Id + ')">Xóa</a></td>';
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, page)
+            }
+            else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, 1)
+            }
+            else {
+                loaddata(null, 1);
+            }
+
+        });
+        function Delele(ID) {
+            var ans = confirm("Bạn có chắc muốn xóa không?");
+            if (ans) {
+                $.ajax({
+                    url: "/KhachHangOnlineAdmin/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loaddata(null, 1);
+                        alert('Bạn đã xóa sản phẩm thành công');
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}
+
+
+
+
+
+
+

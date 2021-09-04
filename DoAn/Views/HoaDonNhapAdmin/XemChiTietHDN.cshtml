@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "XemChiTietHDN";
+    Layout = "~/Views/Shared/Admin.cshtml";
+    var hdn = (DoAn.Models.Model.Admin.HoaDonNhapModel)ViewBag.HoaDonNhap;
+}
+
+<div class="container">
+    <div class="hoadonnhap">
+        <div class="container row">
+            <div class="col-md-4">
+                <span>Ngày nhập: @String.Format("{0:d/M/yyyy}", hdn.NgayNhap)</span>
+            </div>
+            <div class="col-md-4">
+                <span>Người nhập:  @hdn.TenDangNhap</span>
+            </div>
+            <div class="col-md-4">
+                <span>Nhà cung cấp:  @hdn.TenNCC</span>
+            </div>
+
+            <div class="col-md-4">
+                <span>Tổng tiền: @String.Format("{0:0,0}", @hdn.TongTien)đ</span>
+            </div>
+
+            <div class="col-md-4">
+                <span>Chiết khấu:  @String.Format("{0:0,0}", @hdn.ChietKhau)đ</span>
+            </div>
+            <div class="col-md-4">
+                <span>Phải trả  :  @String.Format("{0:0,0}", @hdn.PhaiTra)đ</span>
+            </div>
+
+        </div>
+    </div>
+    <hr />
+    <div class="cthoadonnhap">
+        
+            
+            <h4>Danh sách nguyên liệu nhập</h4>
+        
+        <br />
+        <table width="100%" class="table table-bordered">
+            <tr>
+                <th width="5%">STT</th>
+                <th width="24%">Tên nguyên liệu</th>
+                <th width="13%">Số lượng</th>
+                <th width="13%">Giá nhập</th>
+                <th width="13%">Giảm giá</th>
+                <th width="15%">Thành tiền</th>
+
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="table-center" width="5%">@item.STT</td>
+                    <td width="24%">@item.TenNguyenLieu</td>
+                    <td width="13%" class="table-center">@String.Format("{0:0,0}", Convert.ToInt32(item.SoLuong))</td>
+                    <td width="13%" class="table-center">@String.Format("{0:0,0}", Convert.ToInt32(item.GiaNhap))</td>
+                    <td width="13%" class="table-center">@String.Format("{0:0,0}", Convert.ToInt32(item.ChietKhau))</td>
+                    <td width="15%" class="table-center">@String.Format("{0:0,0}", item.ThanhTien)đ</td>
+
+                </tr>
+
+            }
+        </table>
+        <div class="row">
+            <div class="col-md-10"></div>
+            <div class="col-md-2">
+                <a href="/HoaDonNhapAdmin/Index" class="btn btn-success">Quay về</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,105 @@
+﻿
+@{ ViewBag.Title = "Index";
+                Layout = "~/Views/Shared/Admin.cshtml";
+                var lst_doanhthucacthang = (List<DoAn.Models.Model.Admin.DoanhThuModel>)ViewBag.ListDoanhThu; }
+
+<div style="margin: 10px; padding: 10px;">
+    <button onClick="printdiv('div_print');" class="btn" style="background-color: #a59f9f;font-weight:bold;color:white;text-decoration:none;margin-left:3px;">Print</button>
+</div>
+
+<div class="container mt-3" id="div_print">
+    <div class="thongkedoanhthu">
+        <span>
+            THỐNG KÊ DOANH THU
+        </span>
+    </div>
+    <br>
+    <div class="row">
+
+
+        <div class="col-xl-11 col-md-11">
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+        </div>
+        <div class="col-xl-1 col-md-1"></div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-xl-2 col-lg-2 col-md-2"></div>
+    <div class="col-xl-8 col-lg-8 col-md-8">
+        <table width="100%" class="table-bordered">
+            <tr>
+                <th width="30%">Ngày</th>
+                <th width="30%">Tổng số lượng bán</th>
+                <th width="40%">Tổng doanh thu</th>
+            </tr>
+
+            @foreach (var item in lst_doanhthucacthang)
+            {
+<tr>
+    <td width="30%" class="table-center">@item.NgayBan</td>
+    <td width="30%" class="table-center">@item.SoLuongBan</td>
+    @if (item.Y == 0)
+    {
+<td width="40%" class="table-center"><span>0đ</span></td> }
+                else
+                {
+<td width="40%" class="table-center">@String.Format("{0:0,0}", item.Y)đ</td>}
+
+</tr>}
+
+        </table>
+    </div>
+    <div class="col-xl-2 col-lg-2 col-md-2"></div>
+
+</div>
+
+
+
+
+
+
+
+@section doanhthu{
+    <script language="javascript">
+        function printdiv(printpage) {
+            var headstr = "<html><head><title></title></head><body>";
+            var footstr = "</body>";
+            var newstr = document.all.item(printpage).innerHTML;
+            var oldstr = document.body.innerHTML;
+            document.body.innerHTML = headstr + newstr + footstr;
+            window.print();
+            document.body.innerHTML = oldstr;
+            return false;
+        }
+    </script>
+    <script>
+             window.onload = function () {
+
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    theme: "light1",
+
+                    axisY: {
+                        scaleBreaks: {
+                            autoCalculate: true,
+                            type: "wavy",
+                            lineColor: "black"
+                        },
+                        gridThickness: 0,
+                        suffix: "đ"
+                    },
+                    data: [{
+                        type: "column",
+                        indexLabel: "{y}đ",
+                        dataPoints:  @Html.Raw(@ViewBag.DataPoints)
+                    }]
+                });
+                chart.render();
+
+            }
+
+    </script>
+
+}

@@ -1,0 +1,356 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/QuanLy.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.NhanVienModel
+<div class="container">
+    <div class="danhsachsanpham">
+        <div class="">
+            <h4>Quản lý nhân viên</h4>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10 row">
+                <div class="col-md-1"></div>
+                
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7" />
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-warning" id="search">Search</button>
+                </div>
+                
+                <div class="col-md-2"></div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="themsanpham" class="btn btn-primary" data-toggle="modal" data-target="#modalsanpham" onclick="clearTextBox()">Thêm nhân viên mới</button><br /><br />
+            </div>
+        </div>
+
+
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="18%">
+                        Họ tên
+                    </th>
+                    <th width="15%">
+                        Tên đăng nhập
+                    </th>
+                    <th width="20%">
+                        Địa chỉ
+                    </th>
+                    <th width="10%">
+                        Số điện thoại
+                    </th>
+                    <th width="10%">
+                        Chức vụ
+                    </th>
+                    <th width="10%">
+                        Lương
+                    </th>
+                    <th width="12%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="modal fade " id="modalsanpham" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Thêm nhân viên mới</h4>
+                <button type="button" class="close" id="closemodalsanpham" data-dismiss="modal">×</button>
+
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="text" class="form-control" id="idnhanvien" placeholder="" style="display:none;" />
+                    <div class="form-group row">
+                        <label for="NoiDung" class="col-md-3">Tên nhân viên</label>
+                        <input type="text" class="form-control col-md-8" id="tennhanvien" placeholder="Họ tên nhân viên" />
+                        <div class="col-md-1"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="NoiDung" class="col-md-3">Tên đăng nhập</label>
+                        <input type="text" class="form-control col-md-8" id="tendangnhap" placeholder="tên đăng nhập" />
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="Age" class="col-md-3">Chức vụ</label>
+                        @Html.DropDownListFor(model => model.MaChucVu, Model.SelectChucVu, "--------Chọn chức vụ----------", htmlAttributes: new { @class = "form-control col-md-8" })
+                        <div class="col-md-1"></div>
+                    </div>
+
+                    
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnAdd">Add</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnUpdate" style="display:none;">Update</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnclosesanpham">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section nhanvienquanly{
+    <script>
+
+
+       
+
+
+        $(document).ready(function (e) {
+
+            loaddata(null,1);
+        });
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/HomeQuanLy/List",
+                type: "GET",
+                data: { txtSearch: txtSeach, page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT+ '</td>';
+                        html += '<td width="20%">' + item.HoTen + '</td>';
+                        html += '<td width="15%">' + item.TenDangNhap + '</td>';
+                        html += '<td width="20%">' + item.DiaChi + '</td>';
+                        html += '<td width="10%">' + item.SDT + '</td>';
+                        html += '<td width="10%">' + item.TenChucVu + '</td>';
+                        html += '<td width="10%">' + item.Luong + 'đ</td>';
+                        html += '<td width="12%">  <a href="#"   onclick="getbyID(' + item.Id + ')">Sửa</a> | <a href="#"  onclick="Delele(' + item.Id + ')">Xóa</a></td>';
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, page)
+            }
+            else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, 1)
+            }
+            else {
+                loaddata(null, 1);
+            }
+
+        });
+
+
+        $('#btnAdd').click(function () {
+
+            var machucvu = $("#MaChucVu").find(":selected").val();
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                HoTen: $('#tennhanvien').val(),
+                TenDangNhap: $('#tendangnhap').val(),
+               
+                MaChucVu: machucvu,
+            };
+            $.ajax({
+                url: "/HomeQuanLy/Add",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    loaddata(null, 1);
+                    alert('Bạn đã thêm mới thành công');
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        });
+
+        function getbyID(manhanvien) {
+            $('#tennhanvien').css('border-color', 'lightgrey');
+            $('#tendangnhap').css('border-color', 'lightgrey');
+            $('#tennhanvien').css('border-color', 'lightgrey');
+            
+
+            $('#MaChucVu').css('border-color', 'lightgrey');
+
+
+            $.ajax({
+                url: "/HomeQuanLy/GetbyID/" + manhanvien,
+                type: "GET",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    $('#themsanpham').click();
+                    $('#idnhanvien').val(result.Id);
+                    $('#tennhanvien').prop("disabled", true);
+                    $('#tennhanvien').val(result.TenSanPham);
+                    $('#tendangnhap').prop("disabled", true);
+                    $('#tendangnhap').val(result.TenDangNhap);
+                    $('#MaChucVu option[value=' + result.MaChucVu + ']').attr('selected', 'selected');
+                    $('#btnUpdate').show();
+                    $('#btnAdd').hide();
+                    $('#myModalLabel').text('Sửa thông tin sản phẩm');
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            return false;
+
+        }
+
+        $('#btnUpdate').click(function () {
+            var machucvu = $("#MaChucVu").find(":selected").val();
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                Id : $('#idnhanvien').val(),
+                
+                MaChucVu: machucvu,
+            };
+            $.ajax({
+                url: "/HomeQuanLy/Update",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    loaddata(null, 1);
+                    alert('Bạn đã sửa thông tin sản phẩm thành công');
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        });
+        function Delele(ID) {
+            var ans = confirm("Bạn có chắc muốn xóa không?");
+            if (ans) {
+                $.ajax({
+                    url: "/HomeQuanLy/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loaddata(null, 1);
+                        alert('Bạn đã xóa sản phẩm thành công');
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function clearTextBox() {
+
+            $('#idnhanvien').val("");
+            $('#tennhanvien').val("");
+            $('#tennhanvien').prop("disabled", false);
+            $('#tendangnhap').val("");
+            $('#tendangnhap').prop("disabled", false);
+            $('#myModalLabel').text('Thêm sản phẩm mới');
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            
+
+
+
+            var maloai = $("#MaChucVu").find(":selected").val();
+            if (maloai == "") {
+
+                isValid = false;
+            }
+            else {
+
+            }
+
+
+            return isValid;
+        }
+    </script>
+
+}
+
+

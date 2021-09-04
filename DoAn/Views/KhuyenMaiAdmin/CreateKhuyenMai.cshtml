@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewBag.Title = "CreateKhuyenMai";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.KhuyenMaiModel
+<div class="create-product">
+    <div class="cp-title row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+            <span>THÊM MỚI</span>
+        </div>
+        
+
+
+    </div>
+</div>
+@using (Html.BeginForm("CreateKhuyenMai", "KhuyenMaiAdmin", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="main-createproduct row">
+            <div class="col-md-1"></div>
+            <div class="col-md-9 mcp-content">
+                <div class="form-group row ">
+                    @Html.LabelFor(model => model.Ten, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9 ">
+                        @Html.TextBoxFor(model => model.Ten, new { @class = "form-control mcp-content" })
+                        @Html.ValidationMessageFor(model => model.Ten, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="row nhomsanpham">
+                    <div class="col-md-4 col-xl-4 col-lg-4">Chọn nhóm sản phẩm</div>
+                    <div class="col-md-8 col-xl-8 col-lg-8 row chonloaisp">
+
+                        <form>
+                            @foreach (var item in Model.ListLoaiSanPham)
+                            {
+
+                                <div class="checkbox col-md-6 row">
+                                    <input type="checkbox" value="@item.Id" class="col-md-1" name="ckb_loaisp">
+                                    <span class="col-md-11 ten-lsp">@item.TenLoaiSanPham</span>
+
+                                </div>
+
+
+
+
+                            }
+                        </form>
+
+
+                    </div>
+                    <input type="text" name="listlspdc" value="" style="display:none;" />
+                </div>
+
+
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.PhanTram, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.PhanTram, new { htmlAttributes = new { @class = "form-control" }, @type = "number", @class = "form-control", @min = "0" })
+                        @Html.ValidationMessageFor(model => model.PhanTram, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.NgayBatDau, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.NgayBatDau, new { htmlAttributes = new { @class = "form-control" }, @type = "date", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.NgayBatDau, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    @Html.LabelFor(model => model.NgayKetThuc, htmlAttributes: new { @class = "control-label col-md-3" })
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.NgayKetThuc, new { htmlAttributes = new { @class = "form-control" }, @type = "date", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.NgayKetThuc, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group mcp-bottom">
+                    <div class="row">
+                        <div class="col-md-5"></div>
+                        <input type="submit" value="Thêm mới" class="btn btn-primary col-md-2" id="btn-apdung" />
+                        <div class="col-md-5"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+
+        </div>
+    </div>
+}
+@section khuyenmai{
+    <script>
+        $('#btn-apdung').click(function () {
+            var mang = [];
+            $('input[name="ckb_loaisp"]:checked').each(function (i) {
+                mang[i] = $(this).val();
+            });
+            $('input[name="listlspdc"]').val(mang);
+        });
+
+
+
+    </script>
+}
+
+

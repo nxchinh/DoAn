@@ -1,0 +1,108 @@
+﻿body {
+}
+.header-nhanvien{
+    background-color:deepskyblue;
+}
+
+.header-nhanvien .top-left img {
+    margin-top: 10px;
+}
+.user-area user-menu{
+    margin-right:30px;
+}
+.ml-title, .mr-title {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+    .ml-title span, .mr-title span{
+        font-size: 25px;
+        font-weight: bold;
+        color: blue;
+    }
+.div-sanpham {
+    text-align: center;
+    background-color: aliceblue;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+.div-sanpham:hover > a{
+    color:red;
+    text-decoration:none;
+}
+.div-sanpham:hover{
+    padding:10px;
+    background-color:white;
+}
+.main-left {
+    background-color: #E8DDCB;
+}
+.main-right{
+    background-color:aliceblue;
+}
+.main-right .thanhtoan{
+    text-align:center;
+}
+.ct-hoadon .soluong input {
+    width: 7%;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    border: none;
+}
+.ct-hoadon .soluong .xoa{
+    float:right;
+}
+.ct-hoadon .ten-sp .ten-sanpham{
+    font-weight:bold;
+}
+.ct-hoadon .gia-thanhtien .gia {
+    float: left;
+}
+.ct-hoadon .gia-thanhtien .thanhtien {
+    float: right;
+}
+.bold{
+    font-weight:bold;
+}
+.tentrasua-modal{
+    font-size:25px;
+    font-weight:bold;
+}
+.nv-tendangnhap{
+    color:black;
+    text-decoration:none;
+}
+.nv-tendangnhap:hover {
+    color: black;
+    text-decoration: none;
+}
+.thanhtoan-hd{
+    text-align:center;
+}
+.thanhtoan-hd span{
+    color:blue;
+    font-size:25px;
+    font-weight:bold;
+}
+.tt-khachhang .title span{
+    font-weight:bold;
+    font-size:25px;
+    position:relative;
+    top:10px;
+    left:30px;
+    color:red;
+}
+
+.tenchinhanh-nv{
+    text-align:center;
+}
+.tenchinhanh-nv span{
+    font-size:26px;
+    font-weight:bold;
+    color:white;
+    position:relative;
+    top:10px;
+}

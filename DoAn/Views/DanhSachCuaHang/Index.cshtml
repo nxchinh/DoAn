@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+@model List<DoAn.Models.EF.ChiNhanh>
+<div class="banner-gioithieu">
+    <img src="~/images/cuahang-banner.jpg" />
+    <span class="">CỬA HÀNG</span>
+</div>
+<div class="container">
+    <div class="title-cuahang">
+        <span>DANH SÁCH CỬA HÀNG</span>
+    </div>
+    <hr />
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4">
+                <div class="ct-cuahang">
+                    <div class="tenchinhanh">@item.TenChiNhanh</div>
+                    <div class="diachichinhanh">@item.DiaChi</div>
+                </div>
+                <hr />
+            </div>
+        }
+    </div>
+</div>
+
+
+

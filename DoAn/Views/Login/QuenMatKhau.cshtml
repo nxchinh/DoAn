@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "QuenMatKhau";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+@model DoAn.Models.Model.NguoiDung.KhachHangModel
+<div class="container">
+    <div class="row">
+        <div class="col-xl-1"></div>
+        <div class="col-xl-6">
+            <div class="doimatkhau">
+                <div class="dmk-title">
+                    <div class="dmkt-1">Khôi phục mật khẩu</div>
+                    <div class="dmkt-2">
+                        <span>
+                            Nếu bạn quên mật khẩu, nhập địa chỉ email và tên đăng nhập của bạn vào khung này và nhấp Khôi phục mật khẩu.
+
+                            Bạn sẽ nhận được mật khẩu mới và một liên kết để đăng nhập. Bạn có thể thay đổi mật khẩu sau đó.
+                        </span>
+                    </div>
+                </div>
+                <div class="dmk-content">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @if (ViewBag.DoiMatKhau != null)
+                        {
+                            <div class="alert alert-success">@ViewBag.DoiMatKhau</div>
+                        }
+                        @if (ViewBag.SaiEmail != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.SaiEmail</div>
+                        }
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger">@ViewBag.SaiEmail</div>
+                        }
+
+
+
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.TenDangNhap, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.TenDangNhap, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.TenDangNhap, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-8">
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-xl-3"></div>
+
+                            <div class="col-md-offset-2 col-xl-6">
+                                <input type="submit" value="KHÔI PHỤC MẬT KHẨU" class="btn btn-success" />
+                            </div>
+                            <div class="col-xl-3"></div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5"></div>
+    </div>
+</div>
+
+
+
+
+
+

@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "CreateHDN";
+    Layout = "~/Views/Shared/Admin.cshtml";
+    var list_chitiethdn = (List<DoAn.Models.Model.Admin.CTHDNhapModel>)ViewBag.ListChiTietHDN;
+}
+
+@model DoAn.Models.Model.Admin.HoaDonNhapModel
+
+<div class="row">
+    <div class="col-xl-8 col-md-8 hoadonnhap-left">
+        <div class="chitiethdn-title row">
+            <span class="col-md-9 nhaphang">Nhập hàng</span>
+
+            <div class="col-md-1"></div>
+        </div>
+        <div class="chitiethdn-content">
+            <table width="100%" class="table table-bordered">
+                <tr>
+                    <th width="5%">STT</th>
+                    <th width="24%">Tên sản phẩm</th>
+                    <th width="13%">Số lượng</th>
+                    <th width="13%">Giá nhập</th>
+                    <th width="13%">Giảm giá</th>
+                    <th width="15%">Thành tiền</th>
+                    <th width="20%"></th>
+                </tr>
+                @if (@list_chitiethdn == null)
+                {
+
+                }
+                else
+                {
+                    foreach (var item in @list_chitiethdn)
+                    {
+                        <tr>
+                            <td class="table-center" width="5%">@item.STT</td>
+                            <td width="24%">@item.TenNguyenLieu</td>
+                            <td width="13%" class="table-center"><input type="text" name="hdn" value="@String.Format("{0:0,0}",Convert.ToInt32(item.SoLuong))" style="width:70%;" id="SoLuongCTHDN_@item.Id" /></td>
+                            <td width="13%" class="table-center"><input type="text" name="hdn" value="@String.Format("{0:0,0}",Convert.ToInt32(item.GiaNhap))" style="width:100%;" id="GiaNhapCTHDN_@item.Id" /></td>
+                            <td width="13%" class="table-center"><input type="text" name="hdn" value="@String.Format("{0:0,0}",Convert.ToInt32(item.ChietKhau))" style="width:100%;" id="ChietKhauCTHDN_@item.Id" /></td>
+                            <td width="15%" class="table-center">@String.Format("{0:0,0}", item.ThanhTien)đ</td>
+                            <td width="20%">
+                                <button class="" onclick="SuaChiTietHDN(@item.Id)">sửa</button>
+
+                                <button class="">xóa</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="row">
+                <div class="col-md-9"></div>
+                <a href="/HoaDonNhapAdmin/CreateCTHDN" class="col-md-2 btn btn-success">nhập hàng</a>
+                <div class="col-md-1"></div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4 hoadonnhap-right">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="main-createproduct row">
+
+                    <div class="col-md-12 mcp-content">
+                        <div class="form-group row">
+
+                            <div class="col-md-11">
+                                @Html.DropDownListFor(model => model.MaNhaCungCap, Model.SelectNCC, "--------Chọn nhà cung cấp----------", new { @class = "form-control " })
+
+                                @Html.ValidationMessageFor(model => model.MaNhaCungCap, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+
+                        <div class="form-group row ">
+                            @Html.LabelFor(model => model.TongTien, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                            <div class="col-md-7 ">
+                                @if (@Model.TongTien == null)
+                                {
+                                    <input type="text" name="name" value="0đ" class="form-control" disabled />
+                                }
+                                else
+                                {
+                                    <input type="text" name="name" value="@String.Format("{0:0,0}",@Model.TongTien)đ" class="form-control" disabled />
+                                }
+
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                        <div class="form-group row ">
+                            @Html.LabelFor(model => model.ChietKhau, htmlAttributes: new { @class = "control-label col-md-4" })
+                            <div class="col-md-7 ">
+                                <input type="text" name="hdn" value="" class="form-control" id="input-chietkhauhdn" />
+
+                                @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-1"></div>
+                        </div>
+                        @Html.TextBoxFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control" }, @class = "form-control", @style = "display:none;", @id = "chietkhauhdn" })
+
+
+                        <div class="form-group mcp-bottom">
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <input type="submit" value="Hoàn thành" class="btn btn-primary col-md-4" />
+                                <div class="col-md-4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section hoadonnhap{
+
+    <script>
+
+        $('input[name="hdn"]').change(function () {
+            $('#chietkhauhdn').val($("#input-chietkhauhdn").val());
+        });
+        function SuaChiTietHDN(id) {
+            var soluong = $('#SoLuongCTHDN_' + id).val();
+            var gianhap = $('#GiaNhapCTHDN_' + id).val();
+            var chietkhau = $('#ChietKhauCTHDN_' + id).val();
+
+            window.location.href = '/HoaDonNhapAdmin/SuaCTHDN?id=' + id + '&soluong=' + soluong + '&gianhap=' + gianhap + '&chietkhau=' + chietkhau;
+
+        }
+    </script>
+}
+
+
+

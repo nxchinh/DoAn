@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/NhanVien.cshtml";
+}
+
+@model List<DoAn.Models.Model.Admin.SanPhamModel>
+
+<div class="main-nhanvien">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-xl-8 xl-lg-8 main-left" style="background: #C6D5CD;">
+                <div class="ml-title">
+                    <Span>THỰC ĐƠN CỬA HÀNG</Span>
+                </div>
+                <div class="ml-timkiem row">
+
+
+                    <div class="col-md-10">
+                        @await Component.InvokeAsync("SelectLoaiSanPham")
+                    </div>
+                    <div class="col-md-2">
+                        <a href="/HomeNhanVien/Index" class="btn btn-success">Xem tất cả</a>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="ml-content row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-md-3 col-xl-3 ">
+                            <div class="div-sanpham">
+                                <a href="" data-toggle="modal" data-target="#myModal" id="a-sanpham-hd" onclick="LoadModal(@item.Id)">
+                                    <input type="text" name="name" value="@item.Id" id="ma-sanpham_@item.Id" style="display:none" />
+                                    <input type="text" name="name" value="@item.Ten" id="ten-sanpham_@item.Id" style="display:none" />
+                                    <input type="text" name="name" value="@String.Format("{0:0,0}", item.KhuyenMai)đ" id="gia-sanpham_@item.Id" style="display: none" />
+                                    <input type="text" name="name" value="@item.Anh" id="anh-sanpham_@item.Id" style="display:none" />
+                                    <img src="@Url.Content("~/images/" + item.Anh)" alt="" />
+                                    <span class="ten-sanpham">@item.Ten</span>
+                                </a>
+
+                            </div>
+
+                        </div>
+                    }
+
+
+
+
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-4 col-xl-4 xl-lg-4 main-right"style="background:#FFFDF8;">
+                <div class="mr-title">
+                    <span>HÓA ĐƠN</span>
+                </div>
+                @await Component.InvokeAsync("HoaDonTheoId")
+
+                @await Component.InvokeAsync("TongTienSanPham")
+
+                @*<div class="khuyenmai">
+                <span>Nhập mã khuyến mãi: </span>
+                <input type="number" name="name" value="" class="form-control" min="0" max="100" id="khuyenmaihd" />
+            </div>*@
+                <div class="thanhtoan" style="margin: 10px;">
+                    <a href="/BillNhanVien/ThanhToan" class="btn btn-primary">Thanh Toán</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal " id="myModal">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header row">
+                <div class="col-md-2 col-4">
+                    <span id="id-sanpham" style="display:none;"></span>
+                    <img src="~/images/traalisanxoai.png" id="image-sanpham" />
+                </div>
+                <div class="col-md-8 col-7">
+                    <div class="tentrasua-modal">
+                        <span id="name-sanpham">Trà Sữa Thái Lan</span>
+                    </div>
+                    <br>
+                    <div class="giatrasua-modal">
+                        <span>Giá: </span>
+                        <span id="price-sanpham">17,600đ</span>
+
+                    </div>
+                </div>
+                <div class="col-md-2 col-1">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="chonsize">
+                    <div class="title">
+                        <span class="bold">CHỌN SIZE</span> <span>( BẮT BUỘC)</span>
+                    </div>
+                    @await Component.InvokeAsync("SanPhamSize")
+
+                </div>
+                <hr />
+                <div class="chonduong">
+                    <div class="title">
+                        <span class="bold">CHỌN ĐƯỜNG</span> <span>( BẮT BUỘC)</span>
+                    </div>
+                    @await Component.InvokeAsync("SanPhamDuong")
+
+                </div>
+                <hr>
+                <div class="chonda">
+                    <div class="title">
+                        <span class="bold">CHỌN ĐÁ</span> <span>( BẮT BUỘC)</span>
+                    </div>
+
+                    @await Component.InvokeAsync("SanPhamDa")
+                </div>
+                <hr />
+                <div class="chontopping">
+                    <div class="title">
+                        <span class="bold">CHỌN TOPPING</span>
+                    </div>
+                    <hr />
+                    @await Component.InvokeAsync("SanPhamTopping")
+                </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer row">
+                <div class="col-md-10"></div>
+                <div class="soluong-modal col-md-2">
+                    <button type="button" class="btn btn-danger btn-chon" data-dismiss="modal">OK</button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+@section locsanpham{
+    <script>
+
+        $('#selectId').on('change', function () {
+            var selectVal = $("#selectId option:selected").val();
+            if (selectVal == '') {
+                window.location.href = '/HomeNhanVien/Index';
+            }
+            else {
+                window.location.href = '/HomeNhanVien/Index?maloai=' + selectVal;
+            }
+            
+            
+        });
+        function LoadModal(masanpham) {
+            $('#id-sanpham').text($('#ma-sanpham_' + masanpham).val());
+            $('#name-sanpham').text($('#ten-sanpham_' + masanpham).val());
+            $('#price-sanpham').text($('#gia-sanpham_' + masanpham).val());
+            var image = $('#anh-sanpham_' + masanpham).val();
+            $('#image-sanpham').attr('src', '/images/' + image);
+            $('.ten-sanpham').css('color', 'blue');
+        }
+
+        $('.btn-chon').click(function(){
+            var mang = [], topping = [], duong = [], da = [], size = [], product = [$('#id-sanpham').text()];
+            $('input[name="ckb_topping"]:checked').each(function (i) {
+                topping[i] = $(this).val();
+            });
+            $('input[name="op_size"]:checked').each(function (i) {
+                size[i] = $(this).val();
+            });
+            $('input[name="op_duong"]:checked').each(function (i) {
+                duong[i] = $(this).val();
+            });
+            $('input[name="op_da"]:checked').each(function (i) {
+                da[i] = $(this).val();
+            });
+            mang = product.concat(size, duong, da, topping);
+            window.location.href = '/BillNhanVien/CreateChiTietHD?listproduct=' + mang;
+
+        });
+
+        function UpdateTru(id,chitietthu) {
+            var soluong = Number($('#SoLuong_' + id).val());
+            if (soluong <= 1) {
+                soluong = 1;
+            }
+            else {
+                soluong = soluong - 1;
+            }
+
+            window.location.href = '/BillNhanVien/UpdateChiTietHD?productid=' + id + '&soluong=' + soluong + '&chitietthu=' + chitietthu;
+
+        }
+        function UpdateCong(id, chitietthu) {
+            var soluong = Number($('#SoLuong_' + id).val());
+
+            soluong = soluong + 1;
+
+            window.location.href = '/BillNhanVien/UpdateChiTietHD?productid=' + id + '&soluong=' + soluong + '&chitietthu=' + chitietthu;
+
+        }
+
+
+    </script>
+}
+

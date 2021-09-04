@@ -1,0 +1,16 @@
+﻿@model List<DoAn.Models.EF.SanPham>
+<div class="content row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6">
+            <div class="form-check-inline">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" value="@item.Id" name="ckb_topping">
+                    @item.TenSanPham -
+                </label>
+                <span>@String.Format("{0:0,0}", @item.GiaBan)đ </span>
+
+            </div>
+        </div>
+    }
+</div>

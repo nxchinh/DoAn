@@ -1,0 +1,28 @@
+﻿@model List<DoAn.Models.EF.SanPham>
+<div class="content row">
+    @foreach (var item in Model)
+    {
+        if (item.KhuyenMai == 0)
+        {
+            <div class="col-md-6">
+                <div class="form-check">
+                    <label class="form-check-label" for="radio1">
+                        <input type="radio" class="form-check-input" id="radio1" name="op_size" value="@item.Id" checked> <span>@item.TenSanPham</span>
+                    </label>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-6">
+                <div class="form-check">
+                    <label class="form-check-label" for="radio1">
+                        <input type="radio" class="form-check-input" id="radio1" name="op_size" value="@item.Id" checked> <span>@item.TenSanPham (+@String.Format("{0:0,0}", item.KhuyenMai)đ)</span>
+                    </label>
+                </div>
+            </div>
+        }
+    }
+
+
+</div>

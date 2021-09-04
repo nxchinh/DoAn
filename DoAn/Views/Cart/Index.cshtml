@@ -1,0 +1,265 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+    int count = 1;
+}
+    <style>
+
+        #TienMat .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            width: 100%;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        /*ThanhToan*/
+        .customer_payment {
+            width: 100%;
+            margin-top: 30px;
+            border: solid 1px #07050538;
+            box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+            padding-right: 46px;
+            padding-left: 15px;
+        }
+
+        .location_oder {
+            width: 100%;
+            margin-top: 30px;
+            border: dotted;
+            border-color: #07050538;
+            box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+            padding-right: 46px;
+            padding-left: 15px;
+        }
+
+        .div_boder_payment {
+            padding-top: 5px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #c9c9c9;
+            font-size: 11px;
+            border-color: #ddd;
+        }
+
+        .select_payment_border {
+            border: 0px solid;
+            background: #007bff;
+            text-align: center;
+            width: 67px;
+            height: 35px;
+            padding: 5px;
+            border-radius: 16px;
+        }
+
+        .hover_border_background:hover {
+            background: #1da1f2a1;
+        }
+
+        .select_edit_oder_border {
+            border: 1px solid;
+            background: #fff;
+            text-align: center;
+            width: 67px;
+            height: 35px;
+            padding: 5px;
+            border-radius: 8px;
+        }
+    </style>
+@model List<DoAn.Models.Model.NguoiDung.GioHangModel>
+    <div class="container">
+        <table class="table  table-responsive">
+            <thead width="100%">
+                <tr>
+
+                    <th width="15%"> TÊN SẢN PHẨM</th>
+                    <th width="10%"> HÌNH ẢNH</th>
+                    <th width="10%">  SỐ LƯỢNG</th>
+                    <th width="10%"> ĐƠN GIÁ</th>
+                    <th width="15%"> THÀNH TIỀN</th>
+                    <th width="10%"> MÔ TẢ</th>
+                    <th width="20%">CHỨC NĂNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td width="15%"><span class="cl-cart-tensp"> @item.TenSanPham</span></td>
+                        <td width="10%">  <img src="@Url.Content("~/images/"+@item.Anh)" alt="" width="100" height="100" /></td>
+
+                        <td width="10%" class="cl-center">
+                            <button class="btn-cl-tru" onclick="UpdateTru(@item.MaSanPham, @item.SanPhamThu)">-</button>
+                            <input type="text" name="@item.MaSanPham" value="@item.SoLuong" id="SoLuong_@item.MaSanPham" disabled class="cl-input-soluong" />
+                            <button class="btn-cl-tru" onclick="UpdateCong(@item.MaSanPham, @item.SanPhamThu)">+</button>
+                        </td>
+
+
+                        <td width="10%" class="cl-center"> @String.Format("{0:0,0}", @item.GiaBan)đ</td>
+
+                        <td width="10%" class="cl-center">@String.Format("{0:0,0}", @item.ThanhTien)đ</td>
+                        <td width="25%">@item.MoTa</td>
+
+                        <td width="20%">
+                            <button class="btn btn-danger" onclick="DeleteCart(@item.MaSanPham, @item.SanPhamThu)">Xóa</button>
+
+                        </td>
+                    </tr>
+}
+
+            </tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="cl-center"><span>Tổng Tiền</span></td>
+                <td class="cl-center">
+                    <span>@String.Format("{0:0,0}", @Model.Sum(x => x.ThanhTien))đ</span>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+
+        </table>
+        <div class="col-lg-8" style="margin: 10px; padding: 10px;">
+            <h3 style="color:#5f5f5f;font-weight:bold;">Chọn hình Thức Thanh Toán</h3>
+            <div class="customer_payment">
+                <div style="margin-top: 12px;">
+                    <div>
+                        <span style="float:right;margin-right: 177px;margin-top: 7px;"> Thanh toán bằng tiền mặt khi nhận hàng.</span>
+                        <div class="select_payment_border hover_border_background">
+                            <a onclick="openPayment(event, 'TienMat')" href="#" class="tablinks" data-toggle="tab" id="defaultOpen" style="color: white;font-weight: bold;text-decoration: none;">Chọn</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <span style="float:right;margin-right: 198px;margin-top: 7px;"> Thanh toán bằng <b style="font-size:18px"><span style="color:#173399;">Pay</span><span style="color: #0680d4;">Pal.</span></b> <a href="https://www.paypal.com/vn/webapps/mpp/home" style="color: #007bff;text-decoration:none;font-size:12px;">What is Paypal?</a></span>
+                        <div class="select_payment_border hover_border_background">
+                            <a onclick="openPayment(event, 'Paypal')" href="#" class="tablinks" data-toggle="tab" style="color: white;font-weight: bold;text-decoration: none;">Chọn</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div>
+                        <span style="float:right;margin-top: 7px;"> Thanh toán bằng thẻ ngân hàng, Visa Card (One Pay) <a href="https://www.onepay.vn/" style="color: #007bff;text-decoration:none;font-size:12px;">What is OnePay?</a></span>
+                        <div class="select_payment_border hover_border_background">
+                            <a onclick="openPayment(event, 'onepay')" href="#" class="tablinks" data-toggle="tab" style="color: white;font-weight: bold;text-decoration: none;">Chọn</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="div_boder_payment" style="padding-top: 17px;padding-bottom: 17px;"></div>
+                <div>
+                    <div id="TienMat" class="tabcontent">
+                        <label style="display: inline-block;text-align: center;;max-width: 100%;margin-bottom: 5px; font-weight: 700;" for="id_postalcode">Lưu ý : Đây là phương thức thanh trả sau</label>
+                        <br />
+                        <a style="width:300px;font-size:22px;background-color:#0e8ce4;text-align: center;" class="btn" href="/Bill/CreateBill?tongtien=@Model.Sum(x=>x.ThanhTien)" class="btn btn-primary">Thanh toán</a>
+                    </div>
+                    <div id="Paypal" class="tabcontent">
+                        <div style="margin-top:15px; margin-left:100px;margin-bottom:17px;">
+                            <div style="margin-left:50px;margin-top:10px;">
+                                <img src="~/images/img-paypal.PNG" />
+                            </div>
+                            <div style="margin-left:50px;margin-top:10px;">
+                                <table border="0" cellpadding="10" cellspacing="0" align="center">
+                                    <tr>
+                                        <td align="center"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">
+                                            <div class="paypaldiv">
+                                                <form class="paypalform" action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+                                                    <input type="hidden" name="cmd" value="_cart">
+                                                    <input type="hidden" name="upload" value="1">
+                                                    <input type="hidden" name="business" value="jultranet-facilitator@gmail.com">
+
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <input type="hidden" name="item_name_@count" value="@item.TenSanPham">
+                                                        <input type="hidden" name="amount_@count" value="@Convert.ToString(Math.Round(decimal.Parse(item.GiaBan.Value.ToString()) / 23000, 2, MidpointRounding.AwayFromZero))">
+                                                        <input type="hidden" name="quantity_@count" value="@item.SoLuong">
+                                                        count++;
+                                                    }
+
+                                                    <input type="hidden" name="currency_code" value="USD">
+                                                    <input type="image" src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="onepay" class="tabcontent">
+                        <div style="margin-top:15px; text-align: center;margin-bottom:17px;">
+                            <div style="margin-top:10px;">
+                                <img width="300" height="180" src="~/images/onepay.jpg" />
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <div class="text-center">
+                                    <a class="button btn-primary" href="@Url.Action("Onepay","Cart")">Thanh toán với Onepay</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gh-bottom">
+
+            <a href="/SanPham/Index" class="btn btn-success">Tiếp tục mua hàng</a>
+
+        </div>
+    </div>
+
+<script>
+    function openPayment(evt, TypePayment) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(TypePayment).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    document.getElementById("defaultOpen").click();
+</script>
+<script>
+
+    function UpdateTru(id, sanphamthu) {
+        var soluong = Number($('#SoLuong_' + id).val());
+        if (soluong <= 1) {
+            soluong = 1;
+        }
+        else {
+            soluong = soluong - 1;
+        }
+        window.location.href = '/Cart/UpdateCart?productid=' + id + '&soluong=' + soluong + '&sanphamthu=' + sanphamthu;
+
+    }
+    function UpdateCong(id, sanphamthu) {
+        var soluong = Number($('#SoLuong_' + id).val());
+
+        soluong = soluong + 1;
+
+        window.location.href = '/Cart/UpdateCart?productid=' + id + '&soluong=' + soluong + '&sanphamthu=' + sanphamthu;
+
+    }
+    function DeleteCart(id, sanphamthu) {
+        window.location.href = '/Cart/DeleteCart?productid=' + id + '&sanphamthu=' + sanphamthu;
+
+    }
+</script>
+

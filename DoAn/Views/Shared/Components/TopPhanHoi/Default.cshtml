@@ -1,0 +1,47 @@
+﻿@model List<DoAn.Models.Model.Admin.PhanHoiModel>
+<div class="table-phanhoi">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Phản hồi gần nhất</strong>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered" width="100%">
+                <thead>
+                <tr>
+
+                    <th width="40%">Nội Dung</th>
+                    <th width="30%">User</th>
+                    <th width="30%">Status</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td width="40%">@item.Content</td>
+                        <td width="30%" class="table-center">@item.UserName</td>
+                        <td width="30%" class="table-center">
+                            @if (@item.DaXem == 0)
+                            {
+                                <a href="/PhanHoiAdmin/SuaPhanHoi?maphanhoi=@item.Id" class="btn btn-danger">Chưa xem</a>
+                            }
+                            else
+                            {
+                                <span href="" class="btn btn-primary">Đã xem</span>
+                            }
+                        </td>
+
+
+
+                    </tr>
+                }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

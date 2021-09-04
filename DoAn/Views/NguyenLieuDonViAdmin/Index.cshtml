@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<div class="container">
+    <div class="danhsachsanpham">
+        <div>
+            <h4>Kho nguyên liệu</h4>
+        </div>
+        <hr />
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Tên nguyên liệu
+                    </th>
+                    <th width="25%">
+                        Tên đơn vị
+                    </th>
+                    <th width="25%">
+                        Số lượng
+                    </th>
+                    <th width="25%">
+                        Giá nhập
+                    </th>
+
+                   
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+@section nguyenlieudonvi{
+    <script>
+
+
+        $(document).ready(function (e) {
+
+            loaddata(1);
+        });
+        function loaddata( page) {
+
+            $.ajax({
+                url: "/NguyenLieuDonViAdmin/List",
+                type: "GET",
+                data: {  page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT+ '</td>';
+                        html += '<td width="25%" class="table-center">' + item.TenNguyenLieu + '</td>';
+                        html += '<td width="25%" class="table-center">' + item.TenDonVi + '</td>';
+                        html += '<td width="25%" class="table-center">' + item.SoLuong + '</td>';
+                        html += '<td width="25%" class="table-center">' + item.GiaNhap + 'đ</td>';
+
+                        
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            
+             loaddata( page)
+            
+
+        });
+        
+    </script>
+
+}
+
+

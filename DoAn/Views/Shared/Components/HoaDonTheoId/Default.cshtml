@@ -1,0 +1,22 @@
+﻿@model List<DoAn.Models.Model.NhanVien.CTHDBanModel>
+
+@foreach (var item in Model)
+{
+    <div class="ct-hoadon">
+        <div class="soluong">
+            <button class="btn btn-warning" onclick="UpdateTru(@item.MaSanPham)">-</button>
+            <input style="padding: 8px" width="36px" type="text" name="name" value="@item.SoLuong" min="0" id="SoLuong_@item.MaSanPham" disabled />
+            <button class="btn btn-info" onclick="UpdateCong(@item.MaSanPham, @item.CTThu)">+</button>
+            <a class="btn btn-danger xoa" href="/BillNhanVien/DeleteChiTietHD?productid=@item.MaSanPham&chitietthu=@item.CTThu">Xóa</a>
+        </div>
+        <div class="ten-sp">
+            <span class="ten-sanpham">@item.TenSanPham</span>
+            <span>@item.MoTa</span>
+        </div>
+        <div class="gia-thanhtien">
+            <span class="gia">@String.Format("{0:0,0}", item.GiaBan)đ</span>
+            <span class="thanhtien">@String.Format("{0:0,0}", item.ThanhTien) đ</span>
+        </div>
+        <div class="hoadon-nhanvien-border"></div>
+    </div>
+}

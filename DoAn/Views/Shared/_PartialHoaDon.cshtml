@@ -1,0 +1,22 @@
+﻿
+    <div class="col-md-4 col-xl-4 xl-lg-4 main-right">
+        <div class="mr-title">
+            <span>HÓA ĐƠN</span>
+            <hr />
+        </div>
+        @await Component.InvokeAsync("HoaDonTheoId")
+
+        @await Component.InvokeAsync("TongTienSanPham")
+
+        @*<div class="khuyenmai">
+            <span>Nhập mã khuyến mãi: </span>
+            <input type="number" name="name" value="" class="form-control" min="0" max="100" id="khuyenmaihd" />
+        </div>*@
+        <hr />
+        <div class="thanhtoan">
+            <a href="/BillNhanVien/ThanhToan" class="btn btn-primary">Thanh Toán</a>
+        </div>
+
+
+
+    </div>

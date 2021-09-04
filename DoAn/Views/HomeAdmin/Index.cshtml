@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<div class="content">
+    <!-- Animated -->
+    <div class="animated fadeIn">
+        <!-- Widgets  -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-five">
+                            <div class="stat-icon dib flat-color-1">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            @await Component.InvokeAsync("TongDoanhThu")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-five">
+                            <div class="stat-icon dib flat-color-2">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            @await Component.InvokeAsync("DonHang")
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-five">
+                            <div class="stat-icon dib flat-color-3">
+                                <i class="far fa-window-restore"></i>
+                            </div>
+                            @await Component.InvokeAsync("PhanHoi")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-five">
+                            <div class="stat-icon dib flat-color-4">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            @await Component.InvokeAsync("KhachHangOnline")
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    @await Component.InvokeAsync("Top5KhachHangMuaNhieuNhat")
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    @await Component.InvokeAsync("TopSpBanChay")
+                </div>
+            </div>
+        </div>
+
+

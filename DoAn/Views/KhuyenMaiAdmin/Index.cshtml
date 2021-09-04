@@ -1,0 +1,288 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+    var lstloaisanpham = (List<DoAn.Models.EF.LoaiSanPham>)ViewBag.NhomSanPham;
+}
+
+@model DoAn.Models.Model.Admin.KhuyenMaiModel
+<div class="container">
+    <div class="danhsachsanpham">
+        <div>
+            <h4>Danh sách khuyến mãi</h4>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10 row">
+                <div class="col-md-1"></div>
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7" />
+                <div class="col-md-2"><button type="button" class="btn btn-warning" id="search">Tìm kiếm</button></div>
+
+                <div class="col-md-2"></div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="themsanpham" class="btn btn-primary" onclick="location.href='@Url.Action("CreateKhuyenMai", "KhuyenMaiAdmin")'">Thêm mới</button><br /><br />
+            </div>
+        </div>
+
+
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Tên khuyến mãi
+                    </th>
+                    <th width="13%">
+                        Ngày bắt đầu
+                    </th>
+                    <th width="13%">
+                        Ngày kết thúc
+                    </th>
+                    <th width="10%">
+                        Phần trăm
+                    </th>
+                    <th width="25%">
+                        Loại sản phẩm
+                    </th>
+                    <th width="15%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section khuyenmai{
+    <script>
+        $(document).ready(function (e) {
+
+            loaddata(null, 1);
+        });
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/KhuyenMaiAdmin/List",
+                type: "GET",
+                data: { txtSearch: txtSeach, page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="25%" class="table-center">' + item.Ten + '</td>';
+                        html += '<td width="10%" class="table-center">' + item.NgayBDShow + '</td>';
+                        html += '<td width="10%" class="table-center">' + item.NgayKTShow + '</td>';
+                        html += '<td width="10%" class="table-center">' + item.PhanTram + '</td>';
+                        html += '<td width="25%"  class="table-center">' + item.MoTa + '</td>';
+                        if (item.Status == 0) {
+                            html += '<td width="15%" class="table-center">   <span class="btn-danger">đã dừng</span></td>';
+                        }
+                        else {
+                            html += '<td width="15%" class="table-center">   <a class="btn btn-danger" href="#"  onclick="Update(' + item.Id + ')">Dừng</a></td>';
+                        }
+
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (var i = 1; i <= numSize; i++) {
+                            if (i === pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, page)
+            }
+            else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, 1)
+            }
+            else {
+                loaddata(null, 1);
+            }
+
+        });
+
+
+        $('#btnAdd').click(function () {
+            var mang = [];
+            $('input[name="ckb_loaisp"]:checked').each(function (i) {
+                mang[i] = $(this).val();
+            });
+            $('input[name="listlspdc"]').val(mang);
+
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                Ten: $('#tenkhuyenmai').val(),
+                NgayBatDau: $('#ngaybatday').val(),
+                NgayKetThuc: $('#ngayketthuc').val(),
+                PhanTram: $('#phantram').val(),
+                MoTa: $('#listlspdc').val(),
+
+            };
+            $.ajax({
+                url: "/KhuyenMaiAdmin/Add",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    loaddata(null, 1);
+                    alert('Bạn đã thêm mới thành công');
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        });
+
+
+        function Update(ID) {
+            var ans = confirm("Bạn có chắc muốn dừng không?");
+            if (ans) {
+                $.ajax({
+                    url: "/KhuyenMaiAdmin/Update/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loaddata(null, 1);
+                        alert('Bạn đã dừng khuyến mãi thành công');
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function clearTextBox() {
+
+            $('#hotennhanvien').val("");
+            $('#tendangnhapnhanvien').val("");
+            $('#myModalLabel').text('Thêm sản phẩm mới');
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#tenkhuyenmai').val() == "") {
+                $('#tenkhuyenmai').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#tenkhuyenmai').css('border-color', 'lightgrey');
+            }
+
+
+            if ($('#ngaybatdau').val() == "") {
+                $('#ngaybatdau').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#ngaybatdau').css('border-color', 'lightgrey');
+            }
+
+            if ($('#ngayketthuc').val() == "") {
+                $('#ngayketthuc').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#ngayketthuc').css('border-color', 'lightgrey');
+            }
+
+            if ($('#phantram').val() == "") {
+                $('#phantram').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#phantram').css('border-color', 'lightgrey');
+            }
+
+            if ($('#listlspdc').val() == "") {
+                alert('bạn chưa chọn loại sản phẩm');
+                isValid = false;
+            }
+            else {
+                $('#listlspdc').css('border-color', 'lightgrey');
+            }
+
+
+
+
+
+
+
+
+
+
+
+            return isValid;
+        }
+    </script>
+
+}
+

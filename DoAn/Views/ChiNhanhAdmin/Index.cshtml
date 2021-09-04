@@ -1,0 +1,225 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.ChiNhanhModel
+<div class="container">
+    <div class="danhsachsanpham">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Thêm chi nhánh mới</h4>
+                </div>
+                <form asp-action="Add" asp-controller="ChiNhanhAdmin" method="post">
+                    <div class="modal-body">
+
+                        <input type="text" class="form-control" id="idchinhanh" placeholder="" style="display:none;" />
+                        <div class="form-group row">
+                            <label for="NoiDung" class="col-md-3">Tên sản phẩm</label>
+                            <input asp-for="TenChiNhanh" type="text" class="form-control col-md-8" id="tenchinhanh" placeholder="tên chi nhánh" />
+                            <div class="col-md-1"></div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="GiaBan" class="col-md-3">Địa chỉ</label>
+                            <input asp-for="DiaChi" type="text" class="form-control col-md-8" id="diachichinhanh" placeholder="địa chỉ" />
+                            <div class="col-md-1"></div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" onclick="validate()">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <h4>Danh sách chi nhánh</h4>
+        </div>
+        <hr />
+        <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-10 row">
+                <div class="col-md-1"></div>
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7" />
+                <div class="col-md-2"><button type="button" class="btn btn-warning" id="search">Tìm kiếm</button></div>
+
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+
+
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Tên chi nhánh
+                    </th>
+                    <th width="15%">
+                        Địa chỉ
+                    </th>
+
+                    <th width="15%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section sanphamadmin{
+    <script>
+
+
+        $(document).ready(function (e) {
+
+            loaddata(null, 1);
+        });
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/ChiNhanhAdmin/List",
+                type: "GET",
+                data: { txtSearch: txtSeach, page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="25%">' + item.TenChiNhanh + '</td>';
+                        html += '<td width="25%">' + item.DiaChi + '</td>';
+                        html += '<td width="15%">  <a href="/ChiNhanhAdmin/Update/' + item.Id + '">Sửa</a> | <a href="#"  onclick="Delele(' + item.Id + ')">Xóa</a> | <a href="/NhanVienAdmin/NhanVien_ChiNhanh?machinhanh=' + item.Id + '">Xem chi tiết</a></td>';
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, page)
+            }
+            else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, 1)
+            }
+            else {
+                loaddata(null, 1);
+            }
+
+        });
+
+        function Delele(ID) {
+            var ans = confirm("Bạn có chắc muốn xóa không?");
+            if (ans) {
+                $.ajax({
+                    url: "/ChiNhanhAdmin/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loaddata(null, 1);
+                        alert('Bạn đã xóa sản phẩm thành công');
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function clearTextBox() {
+
+            $('#idchinhanh').val("");
+            $('#tenchinhanh').val("");
+            $('#diachichinhanh').val("");
+
+            $('#myModalLabel').text('Thêm sản phẩm mới');
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#tenchinhanh').val() == "") {
+                $('#tenchinhanh').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#tenchinhanh').css('border-color', 'lightgrey');
+            }
+
+
+            if ($('#diachichinhanh').val() == "") {
+                $('#diachichinhanh').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#diachichinhanh').css('border-color', 'lightgrey');
+            }
+            return isValid;
+        }
+    </script>
+
+}
+
+

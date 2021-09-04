@@ -1,0 +1,262 @@
+﻿
+@{
+    ViewBag.Title = "SanPham";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.SanPhamModel
+<div class="container">
+    <div class="danhsachsanpham">
+        <div class="modal-content" style="padding: 8px;">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Thêm sản phẩm mới</h4>
+            </div>
+            <form asp-action="Add" asp-controller="SanPhamAdmin" id="SanPhamModelForm" enctype="multipart/form-data" method="post">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="text" class="form-control" id="idsanphamadmin" placeholder="" style="display: none;" />
+                    <div class="form-group row">
+                        <label asp-for="Ten" class="col-md-3">Tên sản phẩm</label>
+                        <input asp-for="Ten" type="text" class="form-control col-md-8" id="tensanphamadmin" placeholder="Tên sản phẩm" />
+                        <div class="col-md-1"><span asp-validation-for="Ten" class="text-danger"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="MaLoai" class="col-md-3">Loại sản phẩm</label>
+                        @Html.DropDownListFor(model => model.MaLoai, Model.SelectMaLoai, "--------Chọn loại sản phẩm----------", htmlAttributes: new { @class = "form-control col-md-8" })
+                        <div class="col-md-1"><span asp-validation-for="MaLoai" class="text-danger"></span></div>
+                    </div>
+                    <div class="form-group row">
+                        <label asp-for="GiaBan" class="col-md-3">Giá bán</label>
+                        <input asp-for="GiaBan" type="text" class="form-control col-md-8" id="giabansanphamadmin" placeholder="giá bán" />
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="form-group row">    
+                        <label class="col-md-3">Image</label>
+                        <input id="imgInp" type="file" asp-for="ProductImage" class="col-md-8" accept="image/*" />
+                        <div class="col-md-1">
+                            <span class="text-danger"></span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="gallery image-preview">
+                        <img width="100px;" height="100px;" id="blah" src="~/images/test.png" alt="your image" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="btnAdd" onclick="validate()">Add</button>
+                </div>
+            </form>
+        </div>
+        <hr />
+        <div>
+            <h4>Danh sách sản phẩm</h4>
+        </div>
+        <br />
+        <div class="row" style="padding: 10px">
+            <div class="col-md-12 row text-center">
+                <div class="col-md-1"></div>
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7" />
+                <div class="col-md-1"></div>
+                <button type="button" class="btn btn-warning" id="search">Search</button>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+
+
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Tên sản phẩm
+                    </th>
+                    <th width="15%">
+                        Hình ảnh
+                    </th>
+                    <th width="20%">
+                        Tên loại
+                    </th>
+                    <th width="15%">
+                        Giá bán
+                    </th>
+                    <th width="15%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+@section sanphamadmin{
+
+    <script>
+        $('input[name="GiaBan"]').on('input', function (e) {
+            $(this).val(formatCurrency(this.value.replace(/[,]/g, '')));
+        }).on('keypress', function (e) {
+            if (!$.isNumeric(String.fromCharCode(e.which))) e.preventDefault();
+        }).on('paste', function (e) {
+            var cb = e.originalEvent.clipboardData || window.clipboardData;
+            if (!$.isNumeric(cb.getData('text'))) e.preventDefault();
+        });
+
+        function formatCurrency(number) {
+            var n = number.split('').reverse().join("");
+            var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
+            return n2.split('').reverse().join('');
+        }
+
+
+
+        $(document).ready(function (e) {
+
+            loaddata(null, 1);
+
+        });
+
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/SanPhamAdmin/List",
+                type: "GET",
+                data: {
+                    txtSearch: txtSeach,
+                    page: page
+                },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="25%">' + item.Ten + '</td>';
+
+                        html += '<td width="15%"  class="table-center"> <img width="50%" src="/images/' + item.Anh + '"/> </td>';
+                        html += '<td width="20%">' + item.TenLoai + '</td>';
+                        html += '<td width="15%"  class="table-center">' + item.GiaBan + 'đ</td>';
+                        html += '<td width="15%"> <a href="/SanPhamAdmin/Delete/' + item.Id + '">Xóa</a> | <a href="/SanPhamAdmin/Update/' + item.Id + '">Sửa </a></td>';
+                        html += '<input type ="hidden" class = "id" value ="' + item.Id + '">';
+                        html += '</tr>';
+                        var paginationString = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            paginationString += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (var i = 1; i <= numSize; i++) {
+                            if (i === pageCurrent) {
+                                paginationString += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                paginationString += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            paginationString += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(paginationString);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch !== "") {
+                loaddata(txtSearch, page);
+            } else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch !== "") {
+                loaddata(txtSearch, 1);
+            } else {
+                loaddata(null, 1);
+            }
+
+        });
+
+
+        function clearTextBox() {
+
+            $('#idsanphamadmin').val("").prop('readonly', false);
+            $('#tensanphamadmin').val("").prop('readonly', false);
+            $('#giabansanphamadmin').val("").prop('readonly', false);
+            $('#hinhanhsanphamadmin').val("").prop('readonly', false);
+            $('#pictureUpload').attr('src', '').prop('readonly', false);
+            $('#MaLoai').removeAttr('disabled').find('option:first').attr('selected', 'selected');
+            $('#myModalLabel').text('Thêm sản phẩm mới');
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#tensanphamadmin').val() === "") {
+                $('#tensanphamadmin').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                $('#tensanphamadmin').css('border-color', 'lightgrey');
+            }
+
+
+            if ($('#giabansanphamadmin').val() == "") {
+                $('#giabansanphamadmin').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                $('#giabansanphamadmin').css('border-color', 'lightgrey');
+            }
+
+
+
+            var maloai = $("#MaLoai").find(":selected").val();
+            if (maloai === "") {
+
+                isValid = false;
+            } else {
+
+            }
+
+            if ($('#hinhanhsanphamadmin').val() === "") {
+                $('#hinhanhsanphamadmin').css('border-color', 'Red');
+                isValid = false;
+            } else {
+                $('#hinhanhsanphamadmin').css('border-color', 'lightgrey');
+            }
+
+            return isValid;
+        }
+    </script>
+
+}
+

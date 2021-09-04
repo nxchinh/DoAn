@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.NguyenLieuModel
+
+
+<div class="container">
+    <div class="danhsachsanpham">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Thêm nguyên liệu mới</h4>
+                </div>
+                <form asp-action="Add" asp-controller="NguyenLieuAdmin" method="post">
+                    <div class="modal-body">
+
+                        <input type="text" class="form-control" id="idnguyenlieu" placeholder="" style="display:none;" />
+                        <div class="form-group row">
+                            <label for="NoiDung" class="col-md-3">Tên nguyên liệu</label>
+                            <input asp-for="TenNguyenLieu" type="text" class="form-control col-md-8" id="tennguyenlieu" placeholder="tên nguyên liệu" />
+                            <div class="col-md-1"></div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" onclick="validate()" id="btnAdd">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <h4>Danh sách nguyên liệu</h4>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10 row">
+                <div class="col-md-1"></div>
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7" />
+                <div class="col-md-2"><button type="button" class="btn btn-warning" id="search">Tìm kiếm</button></div>
+
+                <div class="col-md-2"></div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="themsanpham" class="btn btn-primary" data-toggle="modal" data-target="#modalsanpham" onclick="clearTextBox()">Thêm mới</button><br /><br />
+            </div>
+        </div>
+
+
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Tên nguyên liệu
+                    </th>
+
+
+                    <th width="15%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+@section sanphamadmin{
+    <script>
+
+
+        $(document).ready(function (e) {
+
+            loaddata(null, 1);
+        });
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/NguyenLieuAdmin/List",
+                type: "GET",
+                data: { txtSearch: txtSeach, page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.Stt + '</td>';
+                        html += '<td width="25%">' + item.TenNguyenLieu + '</td>';
+
+                        html += '<td width="15%"> <a href="#"  onclick="Delele(' + item.Id + ')">Xóa</a> </td>';
+                        html += '</tr>';
+                        var paginationString = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            paginationString += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (var i = 1; i <= numSize; i++) {
+                            if (i === pageCurrent) {
+                                paginationString += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                paginationString += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            paginationString += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(paginationString);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch !== "") {
+                loaddata(txtSearch, page);
+            }
+            else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch !== "") {
+                loaddata(txtSearch, 1)
+            }
+            else {
+                loaddata(null, 1);
+            }
+
+        });
+        function Delele(ID) {
+            var ans = confirm("Bạn có chắc muốn xóa không?");
+            if (ans) {
+                $.ajax({
+                    url: "/NguyenLieuAdmin/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loaddata(null, 1);
+                        alert('Bạn đã xóa sản phẩm thành công');
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function clearTextBox() {
+
+            $('#idnguyenlieu').val("");
+            $('#tennguyenlieu').val("");
+
+
+            $('#myModalLabel').text('Thêm sản phẩm mới');
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#tennguyenlieu').val() == "") {
+                $('#tennguyenlieu').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#tennguyenlieu').css('border-color', 'lightgrey');
+            }
+
+
+            return isValid;
+        }
+    </script>
+
+}
+
+
+
+

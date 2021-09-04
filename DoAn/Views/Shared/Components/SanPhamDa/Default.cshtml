@@ -1,0 +1,15 @@
+﻿@model List<DoAn.Models.EF.SanPham>
+<div class="content row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6">
+            <div class="form-check">
+                <label class="form-check-label" for="radio11">
+                    <input type="radio" class="form-check-input" id="radio11" name="op_da" value="@item.Id" checked> <span> @item.TenSanPham</span>
+                </label>
+            </div>
+        </div>
+    }
+
+
+</div>

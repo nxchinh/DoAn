@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "AddOrEdit";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+@model DoAn.Models.EF.LoaiSanPham
+<div class="container">
+    <div class="danhsachsanpham">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Thêm loại sản phẩm mới</h4>
+                </div>
+                <form asp-action="Update" id="HoaDonBanModelForm" method="post" asp-controller="NhomSanPhamAdmin">
+                    <div class="modal-body">
+                        <input asp-for="Id" type="text" class="form-control" id="Id" placeholder="" style="display:none;" />
+                        <div class="form-group row">
+                            <label for="NoiDung" class="col-md-3">Tên loại sản phẩm</label>
+                            <input asp-for="TenLoaiSanPham" name="TenLoaiSanPham" type="text" class="form-control col-md-8" id="TenLoaiSanPham" placeholder="tên loại sản phẩm" />
+                            <div class="col-md-1"></div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="btnAdd">Add</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal" id="btnUpdate" style="display:none;">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

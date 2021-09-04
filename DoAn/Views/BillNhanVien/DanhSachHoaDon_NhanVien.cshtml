@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "DanhSachHoaDon_NhanVien";
+    Layout = "~/Views/Shared/NhanVien.cshtml";
+}
+@model List<DoAn.Models.Model.NhanVien.HoaDonBanModel>
+<div class="container">
+    <table class="table  table-bordered">
+        <thead width="100%">
+            <tr>
+
+                <th width="5%">STT</th>
+                <th width="20%">Họ tên</th>
+                <th width="20%">Địa chỉ</th>
+                <th width="15%">Số điện thoại</th>
+                <th width="10%">Tổng tiền</th>
+                <th width="10%">Chức năng</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td width="5%" class="table-center"><span> @item.STT</span></td>
+                    <td width="20%"> <span></span>@item.HoTen</td>
+                    <td width="20%"> <span></span>@item.DiaChi</td>
+                    <td width="10%" class="table-center"> <span></span>@item.SDT</td>
+                    <td width="10%" class="table-center"> <span></span>@String.Format("{0:0,0}", @item.TongTien)đ</td>
+                    <td width="10%" class="table-center">
+                        <a href="/BillNhanVien/ChiTietHoaDon_Online?mahoadon=@item.Id" class="btn btn-primary">Duyệt</a>
+
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+
+    </table>
+    <div class="gh-bottom">
+        <a href="/HomeNhanVien/Index" class="btn btn-success">Tiếp tục mua hàng</a>
+
+    </div>
+</div>
+
+

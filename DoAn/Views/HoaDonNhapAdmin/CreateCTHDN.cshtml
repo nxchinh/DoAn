@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "CreateCTHDN";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+
+@model DoAn.Models.Model.Admin.CTHDNhapModel
+
+
+<div class="row">
+    <div class="col-xl-1"></div>
+    <div class="col-xl-10">
+        <div class="">
+            <h4 class="table-center">Nhập nguyên liệu</h4>
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="main-createproduct row">
+
+                    <div class="col-md-12 mcp-content">
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.MaNguyenLieu, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.DropDownListFor(model => model.MaNguyenLieu, Model.SelectNguyenLieu, "--------Chọn nguyên liệu----------", new { @class = "form-control " })
+
+                                @Html.ValidationMessageFor(model => model.MaNguyenLieu, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            @Html.LabelFor(model => model.MaDonViTinh, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9">
+                                @Html.DropDownListFor(model => model.MaDonViTinh, Model.SelectDonViTinh, "--------Chọn đơn vị tính----------", new { @class = "form-control " })
+
+                                @Html.ValidationMessageFor(model => model.MaDonViTinh, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group row ">
+                            @Html.LabelFor(model => model.GiaNhap, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9 ">
+                                <input type="text" name="hdn" value="" class="form-control" id="input-gianhap" />
+                                @Html.ValidationMessageFor(model => model.GiaNhap, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @Html.TextBoxFor(model => model.GiaNhap, new { htmlAttributes = new { @class = "form-control" }, @class = "form-control", @style = "display:none;", @id = "gianhap" })
+
+                        <div class="form-group row ">
+                            @Html.LabelFor(model => model.SoLuong, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9 ">
+                                <input type="text" name="hdn" value="" class="form-control" id="input-soluong" />
+                                @Html.ValidationMessageFor(model => model.SoLuong, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @Html.TextBoxFor(model => model.SoLuong, new { htmlAttributes = new { @class = "form-control" }, @class = "form-control", @style = "display:none;", @id = "soluong" })
+
+
+                        <div class="form-group row ">
+                            @Html.LabelFor(model => model.ChietKhau, htmlAttributes: new { @class = "control-label col-md-3" })
+                            <div class="col-md-9 ">
+                                <input type="text" name="hdn" value="" class="form-control" id="input-chietkhau" />
+                                @Html.ValidationMessageFor(model => model.ChietKhau, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @Html.TextBoxFor(model => model.ChietKhau, new { htmlAttributes = new { @class = "form-control" }, @class = "form-control", @style = "display:none;", @id = "chietkhau" })
+
+                        <div class="form-group mcp-bottom">
+                            <div class="row">
+                                <div class="col-md-5"></div>
+                                <input type="submit" value="Hoàn thành" class="btn btn-primary col-md-2" />
+                                <div class="col-md-5"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        }
+
+    </div>
+    <div class="col-xl-1"></div>
+</div>
+@section createcthdn{
+    <script>
+        $('input[name="hdn"]').change(function () {
+            $('#gianhap').val($("#input-gianhap").val());
+            $('#soluong').val($("#input-soluong").val());
+            $('#chietkhau').val($("#input-chietkhau").val());
+
+        });
+
+    </script>
+}
+
+
+

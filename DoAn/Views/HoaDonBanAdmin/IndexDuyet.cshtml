@@ -1,0 +1,151 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+
+<div class="container">
+    <div class="danhsachsanpham">
+
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-8 row">
+                <h4>Danh sách hóa đơn đã phê duyệt</h4>
+            </div>
+            <div class="col-md-3">
+                <a href="/HoaDonBanAdmin/Index" class="btn btn-primary" id="btn-hoadonchuaduyet">Hóa đơn chưa duyệt</a>
+            </div>
+        </div>
+        <hr />
+        <br />
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="10%">
+                        Ngày bán
+                    </th>
+                    <th width="15%">
+                        Tên khách
+                    </th>
+                    <th width="20%">
+                        Địa chỉ
+                    </th>
+                    <th width="10%">
+                        Điện thoại
+                    </th>
+                    <th width="15%">
+                        Khuyến mãi
+                    </th>
+                    <th width="10%">
+                        Tổng tiền
+                    </th>
+                    <th width="15%" >
+                        Thanh toán
+                    </th>
+
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+@section hoadonbanduyetadmin{
+    <script>
+        $(document).ready(function (e) {
+            loaddata(1);
+        });
+        function loaddata(page) {
+
+            $.ajax({
+                url: "/HoaDonBanAdmin/ListDuyet",
+                type: "GET",
+                data: { page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="10%" class="table-center">' + item.NgayBanShow + '</td>';
+                        html += '<td width="15%"  class="table-center"> ' + item.TenDangNhap + ' </td>';
+                        html += '<td width="20%">' + item.DiaChi + '</td>';
+                        html += '<td width="10%" class="table-center">' + item.SDT + '</td>';
+
+                        if (item.KhuyenMai == "") {
+                            html += '<td width="15%" class="table-center">0</td>';
+                        } else {
+                            html += '<td width="15%" class="table-center">' + item.KhuyenMai + 'đ</td>';
+                        }
+                        html += '<td width="10%" class="table-center">' + item.TongTienShow + 'đ</td>';
+                        
+                        if (item.DaThanhToan == 0) {
+                            html += '<td width="15%" class="table-center">  <span  class="btn-danger">chưa thanh toán</a> </td>';
+                        }
+                        else {
+                            html += '<td width="15%" class="table-center">  <span  class="btn-success">đã thanh toán</a> </td>';
+                        }
+
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+       
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+
+                loaddata(page)
+
+
+        });
+    </script>
+
+}
+

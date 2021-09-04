@@ -1,0 +1,98 @@
+﻿@model DoAn.Models.Model.NguoiDung.HoaDonBanModel
+
+@{
+    ViewBag.Title = "CreateBill";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+  
+
+
+    <div class="main-createproduct row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 mcp-content">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <hr />
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            @if (ViewBag.Success != null)
+            {
+                <div class="alert alert-success">@ViewBag.Success</div>
+            }
+
+            <div class="div-totalmoneybill row">
+                <span class="col-md-3">Giá trị đơn hàng</span>
+                <div class="col-md-9">
+                    <input type="text" name="name" value="@String.Format("{0:0,0}", @ViewBag.TotalMoney)đ" disabled class=" form-control" />
+                </div>
+
+            </div>
+            <br />
+
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.HoTen, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.HoTen, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.HoTen, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.DiaChi, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.DiaChi, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.SDT, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.SDT, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.SDT, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            
+            @if (ViewBag.Success != null)
+            {
+                <div class="form-group mcp-bottom">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4"><a href="/SanPham/Index" class="btn btn-primary">Tiếp tục mua hàng</a></div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-group mcp-bottom">
+                    <div class="row">
+                        <div class="col-md-4"></div>
+                        <input type="submit" value="Xác nhận đơn hàng" class="btn btn-primary col-md-4" />
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-md-2"></div>
+
+    </div>
+</div>
+}

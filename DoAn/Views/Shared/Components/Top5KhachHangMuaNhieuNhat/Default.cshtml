@@ -1,0 +1,35 @@
+﻿@model IEnumerable<DoAn.Models.Model.Admin.HoaDonBanModel>
+<div class="table-sanphambanchay">
+    <div class="card">
+        <div class="card-header">
+            <strong class="card-title">Khách hàng mua nhiều nhất</strong>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Tên đăng nhập</th>
+                    <th>Tổng hóa đơn</th>
+                    <th>Tổng tiền</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.TenDangNhap</td>
+                        <td class="table-center">@item.TongSoHoaDon</td>
+                        <td class="table-center">@($"{@item.TongTienDaMua:0,0}") đ</td>
+
+                    </tr>
+                }
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

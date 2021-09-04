@@ -1,0 +1,18 @@
+﻿@model List<DoAn.Models.EF.SanPham>
+<div class="sp-title">
+    <span>TOPPING</span>
+</div>
+<div class="sp-content row">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-xl-3 col-lg-3 col-md-3 col-12 ct-sp">
+            <img src="~/images/@item.Anh" width="100%" />
+            <a href="#" class="ten-sp">@item.TenSanPham</a> <br />
+            <span class="giaban">@String.Format("{0:0,0}", @item.GiaBan)đ</span>
+            <span class="giakm">@String.Format("{0:0,0}", @item.KhuyenMai)đ</span> <br />
+        </div>
+    }
+</div>
+
+

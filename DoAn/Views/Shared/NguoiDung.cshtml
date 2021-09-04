@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Trang chủ - Gong cha VietNam </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="~/assets/nguoidung/img/logo/logo_gongcha.png">
+
+    <!-- CSS here -->
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/flaticon.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/slicknav.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/animate.min.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/themify-icons.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/slick.css">
+    <link rel="stylesheet" href="~/assets/nguoidung/css/nice-select.css">
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Itim|Lobster|Montserrat:500|Noto+Serif|Nunito|Patrick+Hand|Roboto+Mono:100,100i,300,300i,400,400i,500,500i,700,700i|Roboto+Slab|Saira" rel="stylesheet">
+
+    <link href="~/assets/nguoidung/css/style.css" rel="stylesheet" />
+    <script language="JavaScript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        .header-bottom .main-menu ul li a {
+            font-size: 16px;
+            text-decoration: none;
+            text-transform: uppercase;
+            display: block;
+            color: #171717;
+            font-weight: 600;
+        }
+        body {
+            font-size: 15px;
+            font-family: 'Noto Serif', serif;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+        .main-sp a {
+            font-size: 15px;
+            font-weight: 500;
+        }
+        .header-bottom .main-menu ul ul.submenu > li > a {
+            font-size: 15px;
+            font-weight: 400;
+        }
+        .form-control {
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="preloader-circle"></div>
+                <div class="preloader-img pere-text">
+                    <img src="~/assets/nguoidung/img/logo/logo_gongcha.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-area">
+            <div class="main-header ">
+                <div class="header-bottom  header-sticky">
+                    <div class="container-fluid">
+                        <div class="row align-items-center">
+                            <div class="col-xl-1 col-lg-1 col-md-1 col-sm-3">
+                                <div class="logo">
+                                    <a href="/Home/Index"><img style="max-height: 70px; margin: 10px 0;" 
+                                                              src="~/assets/nguoidung/img/logo/logo_gongcha.png" width="60px" alt=""></a>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-8 col-md-7 col-sm-5">
+                                <div class="main-menu f-right d-none d-lg-block" style="float: left;">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a href="/Home/Index">Trang chủ</a></li>
+                                            <li><a href="/SanPham/Index">Sản phẩm</a></li>
+                                            <li class="hot">
+                                                <a href="/GioiThieu/Index">Giới thiệu</a>
+
+                                            </li>
+                                            <li>
+                                                <a href="">Cửa hàng</a>
+                                                <ul class="submenu">
+                                                    <li><a href="/Login/DangNhapNhanVien">Đăng nhập nhân viên</a></li>
+                                                    <li><a href="/DanhSachCuaHang/Index">Danh sách cửa hàng</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="/Login/Index">Đăng nhập</a>
+                                            </li>
+
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                            <div class="col-xl-5 col-lg-3 col-md-3 col-sm-3 fix-card">
+                                <ul class="header-right f-right d-none d-lg-block d-flex justify-content-between">
+                                    @*<li class="d-none d-xl-block">
+                                        <div class="form-box f-right ">
+                                            <input type="text" name="Search" placeholder="Tìm kiếm sản phẩm">
+                                            <div class="search-icon">
+                                                <i class="fas fa-search special-tag"></i>
+                                            </div>  
+                                        </div>
+                                    </li>*@
+
+                                    <li>
+                                        @await Component.InvokeAsync("GioHang")
+                                    </li>
+                                    @await Component.InvokeAsync("TenDangNhap")
+
+                                    @*<li class="d-none d-lg-block"> <a href="/Login/Index" class="btn header-btn">Đăng Nhập</a></li>*@
+                                </ul>
+                            </div>
+                            <!-- Mobile Menu -->
+                            <div class="col-12">
+                                <div class="mobile_menu d-block d-lg-none"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Header End -->
+    </header>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>Mời nhập phản hồi từ bạn</span>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <form>
+                    <div class="modal-body">
+                        @*<textarea class="form-control" rows="4" name="noidung-phanhoi"></textarea>*@
+                        <input type="text" class="form-control" name="noidung-phanhoi" value="" id="noidung-phanhoi">
+                    </div>
+                </form>
+
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="" id="btn-guiphanhoi">Gửi phản hồi</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    @RenderBody()
+
+    <footer>
+
+        <!-- Footer Start-->
+        <div class="footer-area footer-padding">
+            <div class="container">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-6">
+                        <div class="single-footer-caption mb-50">
+                            <div class="single-footer-caption mb-30">
+                                <!-- logo -->
+                                <div class="footer-logo">
+                                    <a href="index.html"><img style="max-height: 100px; margin: 10px 0;"
+                                                              src="~/assets/nguoidung/img/logo/logo_gongcha.png" width = 100 alt=""></a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-md-3 col-sm-5">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Về chúng tôi</h4>
+                                <ul>
+                                    <li><a href="#">Công ty</a></li>
+                                    <li><a href="#">Cơ hội nghề nghiệp</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-7">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Liên kết nhanh</h4>
+                                <ul>
+                                    <li><a href="#">Tìm cửa hàng</a></li>
+                                    <li><a href="#">Dành cho đối tác</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-5 col-sm-7">
+                        <div class="single-footer-caption mb-50">
+                            <div class="footer-tittle">
+                                <h4>Dịch vụ khách hàng</h4>
+                                <ul>
+                                    <li><a href="#">Các câu hỏi thường gặp</a></li>
+                                    <li><a href="#">Điều khoản và điều kiện</a></li>
+                                    <li><a href="#">chính sách bảo mật</a></li>
+                                    <li><a href="#">Báo cáo vấn đề thanh toán</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer bottom -->
+                <div class="row">
+                    <div class="col-xl-7 col-lg-7 col-md-7">
+                        <div class="footer-copy-right">
+                            <p>
+
+                                Copyright &copy;
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved
+
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-xl-5 col-lg-5 col-md-5">
+                        <div class="footer-copy-right f-right">
+                            <!-- social -->
+                            <div class="footer-social">
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-behance"></i></a>
+                                <a href="#"><i class="fas fa-globe"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End-->
+
+    </footer>
+
+
+
+    <!-- JS here -->
+    <!-- All JS Custom Plugins Link Here here -->
+    <script src="~/assets/nguoidung/js/vendor/modernizr-3.5.0.min.js"></script>
+    <!-- Jquery, Popper, Bootstrap -->
+    <script src="~/assets/nguoidung/js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="~/assets/nguoidung/js/popper.min.js"></script>
+    <script src="~/assets/nguoidung/js/bootstrap.min.js"></script>
+    <!-- Jquery Mobile Menu -->
+    <script src="~/assets/nguoidung/js/jquery.slicknav.min.js"></script>
+
+    <!-- Jquery Slick , Owl-Carousel Plugins -->
+    <script src="~/assets/nguoidung/js/owl.carousel.min.js"></script>
+    <script src="~/assets/nguoidung/js/slick.min.js"></script>
+
+    <!-- One Page, Animated-HeadLin -->
+    <script src="~/assets/nguoidung/js/wow.min.js"></script>
+    <script src="~/assets/nguoidung/js/animated.headline.js"></script>
+    <script src="~/assets/nguoidung/js/jquery.magnific-popup.js"></script>
+
+    <!-- Scrollup, nice-select, sticky -->
+    <script src="~/assets/nguoidung/js/jquery.scrollUp.min.js"></script>
+    <script src="~/assets/nguoidung/js/jquery.nice-select.min.js"></script>
+    <script src="~/assets/nguoidung/js/jquery.sticky.js"></script>
+
+    <!-- contact js -->
+    <script src="~/assets/nguoidung/js/contact.js"></script>
+    <script src="~/assets/nguoidung/js/jquery.form.js"></script>
+    <script src="~/assets/nguoidung/js/jquery.validate.min.js"></script>
+    <script src="~/assets/nguoidung/js/mail-script.js"></script>
+    <script src="~/assets/nguoidung/js/jquery.ajaxchimp.min.js"></script>
+
+    <!-- Jquery Plugins, main Jquery -->
+
+
+    <script src="~/assets/nguoidung/js/plugins.js"></script>
+    <script src="~/assets/nguoidung/js/main.js"></script>
+<script>
+    $('#btn-guiphanhoi').click(function () {
+        var noidung = $('#noidung-phanhoi').val();
+        window.location.href = '/Home/PhanHoi?noidung=' + noidung;
+    });
+</script>
+
+    @RenderSection("danhgiasanpham", required: false)
+    
+</body>
+</html>
+

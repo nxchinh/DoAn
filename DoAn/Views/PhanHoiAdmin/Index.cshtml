@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<div class="container">
+    <div class="danhsachsanpham">
+        <div class="">
+            <span>Danh sách phản hồi từ khách hàng</span>
+        </div>
+        <br />
+        <hr />
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="15%">
+                        Tên đăng nhập
+                    </th>
+                    <th width="50%">
+                        Nội dung
+                    </th>
+                    <th width="15%">
+                        Thời gian
+                    </th>
+                    <th width="10%">
+                        Trạng thái
+                    </th>
+
+                    <th width="15%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+@section phanhoi{
+    <script>
+        $(document).ready(function (e) {
+
+            loaddata(1);
+        });
+        function loaddata(page) {
+
+            $.ajax({
+                url: "/PhanHoiAdmin/List",
+                type: "GET",
+                data: {page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT + '</td>';
+                        html += '<td width="15%">' + item.UserName + '</td>';
+                        html += '<td width="50%">' + item.Content + '</td>';
+                        html += '<td width="20%">' + item.PhanHoiTu + '</td>';
+                        if (item.DaXem == 0) {
+                            html += '<td width="10%"  class="table-center"> <span class="btn-danger">chưa xem</span></td>';
+                            html +='<td width="15%">   <a href="#"   onclick="Update(' + item.Id + ')">duyệt</a></td>';
+                        }
+                        else {
+                            html += '<td width="10%"  class="table-center"> <span class="btn-success">đã xem</span></td>';
+                            html += '<td width="30%"> </td>';
+                        }
+                       
+                       
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            loaddata( page);
+        });
+        
+        function Update(ID) {
+            $.ajax({
+                url: "/PhanHoiAdmin/Update/" + ID,
+                type: "POST",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (result) {
+                    loaddata(1);
+                    alert('Bạn đã duyệt thành công');
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+            
+        }
+    </script>
+}
+
+

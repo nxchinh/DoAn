@@ -1,0 +1,14 @@
+﻿@model List<DoAn.Models.EF.HoaDonBan>
+<div class="dropdown for-notification">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-bell"></i>
+        <span class="count bg-danger">@Model.Count</span>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="notification">
+        <p class="red">@Model.Count hóa đơn chưa phê duyệt</p>
+        <a class="dropdown-item media" href="/HoaDonBanAdmin/Index">
+            phê duyệt ngay
+        </a>
+
+    </div>
+</div>

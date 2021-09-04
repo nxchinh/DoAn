@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "DoiMatKhau";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+@model DoAn.Models.Model.NguoiDung.DoiMatKhauNguoiDung
+
+<div class="container">
+    <div class="row">
+        <div class="col-xl-1 col-md-1"></div>
+        <div class="col-xl-6 col-md-6">
+            @using (Html.BeginForm("DoiMatKhau", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <div class="dmk-title">
+                        <div class="dmkt-1">ĐỔI MẬT KHẨU</div>
+
+                    </div>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @if (ViewBag.DoiMatKhau != null)
+                    {
+                        <div class="alert alert-success">@ViewBag.DoiMatKhau</div>
+                    }
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+
+
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.MatKhauCu, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(model => model.MatKhauCu, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.MatKhauCu, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.MatKhau, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(model => model.MatKhau, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        @Html.LabelFor(model => model.XacNhanMatKhau, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="col-md-8">
+                            @Html.PasswordFor(model => model.XacNhanMatKhau, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.XacNhanMatKhau, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <br />
+                    <div class="form-group row">
+                        <div class="col-xl-4"></div>
+
+                        <div class="col-md-offset-2 col-xl-4">
+                            <input type="submit" value="Lưu" class="btn btn-success" />
+                        </div>
+                        <div class="col-xl-4"></div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="col-xl-5 col-md-5"></div>
+    </div>
+</div>
+
+
+

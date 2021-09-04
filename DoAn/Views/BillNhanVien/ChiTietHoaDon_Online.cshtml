@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "ChiTietHoaDon_Online";
+    Layout = "~/Views/Shared/NhanVien.cshtml";
+    var khachhang = (DoAn.Models.EF.KhachHang)ViewBag.KhachHang;
+}
+
+@model List<DoAn.Models.Model.NhanVien.CTHDBanModel>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="tt-khachhang">
+                <div class="title">
+                    <span>Thông Tin Khách Hàng</span>
+                </div>
+                <hr />
+                <div class="ten-khachhang row">
+                    <span class="col-xl-4 col-md-4">Họ Tên</span>
+                    <div class="col-xl-8 col-md-8">
+                        <input type="text" name="name" value="@khachhang.HoTen" disabled width="100%" class="form-control" />
+                    </div>
+                </div>
+                <br />
+                <div class="ten-khachhang row">
+                    <span class="col-xl-4 col-md-4">Địa Chỉ</span>
+                    <div class="col-xl-8 col-md-8">
+                        <input type="text" name="name" value="@khachhang.DiaChi" disabled width="100%" class="form-control" />
+                    </div>
+                </div>
+                <br />
+                <div class="ten-khachhang row">
+                    <span class="col-xl-4 col-md-4">Điện Thoại</span>
+                    <div class="col-xl-8 col-md-8">
+                        <input type="text" name="name" value="@khachhang.SDT" disabled width="100%" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <a href="/BillNhanVien/SuaThanhToanOnline_NhanVien?mahdb=@ViewBag.MaHoaDon" class="btn btn-primary" style="margin:10px;">In hóa đơn</a>
+        </div>
+
+        <hr />
+        <div class="col-md-7">
+            <div class="thanhtoan-hd">
+                <br />
+                <span>CHI TIẾT HÓA ĐƠN</span>
+
+            </div>
+            <br />
+            <table class="table table-bordered">
+
+                <tr>
+                    <th class="table-center">STT</th>
+                    <th class="table-center">Tên sản phẩm</th>
+                    <th class="table-center">Giá bán</th>
+                    <th class="table-center">Số lượng</th>
+                    <th class="table-center">Thành tiền</th>
+                </tr>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td class="table-center">
+                            @if (item.STT != 0)
+                            {
+                                @item.STT
+                            }
+
+                        </td>
+                        <td class="table-bold">@item.TenSanPham</td>
+                        <td class="table-center">
+                            @if (item.GiaBan == 0)
+                            {
+                                <span>0đ</span>
+                            }
+                            else
+                            {
+                                <span>@String.Format("{0:0,0}", @item.GiaBan)đ</span>
+                            }
+                        </td>
+                        <td class="table-center">@item.SoLuong</td>
+                        <td class="table-center">
+                            @if (item.ThanhTien == 0)
+                            {
+                                <span>0đ</span>
+                            }
+                            else
+                            {
+                                <span>@String.Format("{0:0,0}", @item.ThanhTien)đ</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="table-center">Tổng tiền</td>
+                    <td class="table-center">
+                        @String.Format("{0:0,0}", @Model.Sum(x => x.ThanhTien))đ
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+

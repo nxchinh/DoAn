@@ -1,0 +1,117 @@
+﻿@model DoAn.Models.Model.NguoiDung.HoaDonBanModel
+
+    <h4>HoaDonBanModel</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit" id="HoaDonBanModelForm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Id"></label>
+                    <input asp-for="Id" class="k-textbox" />
+                    <span asp-validation-for="Id" class="text-danger k-invalid-msg" data-for="Id"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="STT"></label>
+                    <kendo-numerictextbox for="STT" />
+                    <span asp-validation-for="STT" class="text-danger k-invalid-msg" data-for="STT"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaNhanVien"></label>
+                    <kendo-numerictextbox for="MaNhanVien" />
+                    <span asp-validation-for="MaNhanVien" class="text-danger k-invalid-msg" data-for="MaNhanVien"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaKhach"></label>
+                    <kendo-numerictextbox for="MaKhach" />
+                    <span asp-validation-for="MaKhach" class="text-danger k-invalid-msg" data-for="MaKhach"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="NgayBan"></label>
+                    <kendo-datetimepicker for="NgayBan" />
+                    <span asp-validation-for="NgayBan" class="text-danger k-invalid-msg" data-for="NgayBan"></span>
+                 </div>
+                <div class="form-group">
+                    <label asp-for="MaGiamGia"></label>
+                    <kendo-numerictextbox for="MaGiamGia" />
+                    <span asp-validation-for="MaGiamGia" class="text-danger k-invalid-msg" data-for="MaGiamGia"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DiaChi"></label>
+                    <input asp-for="DiaChi" class="k-textbox" />
+                    <span asp-validation-for="DiaChi" class="text-danger k-invalid-msg" data-for="DiaChi"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SDT"></label>
+                    <input asp-for="SDT" class="k-textbox" />
+                    <span asp-validation-for="SDT" class="text-danger k-invalid-msg" data-for="SDT"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HoTen"></label>
+                    <input asp-for="HoTen" class="k-textbox" />
+                    <span asp-validation-for="HoTen" class="text-danger k-invalid-msg" data-for="HoTen"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" class="k-textbox" />
+                    <span asp-validation-for="Email" class="text-danger k-invalid-msg" data-for="Email"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaChiNhanh"></label>
+                    <kendo-numerictextbox for="MaChiNhanh" />
+                    <span asp-validation-for="MaChiNhanh" class="text-danger k-invalid-msg" data-for="MaChiNhanh"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TongTien"></label>
+                    <kendo-numerictextbox for="TongTien" />
+                    <span asp-validation-for="TongTien" class="text-danger k-invalid-msg" data-for="TongTien"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="KhuyenMai"></label>
+                    <kendo-numerictextbox for="KhuyenMai" />
+                    <span asp-validation-for="KhuyenMai" class="text-danger k-invalid-msg" data-for="KhuyenMai"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DaThanhToan"></label>
+                    <kendo-numerictextbox for="DaThanhToan" />
+                    <span asp-validation-for="DaThanhToan" class="text-danger k-invalid-msg" data-for="DaThanhToan"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Status"></label>
+                    <kendo-numerictextbox for="Status" />
+                    <span asp-validation-for="Status" class="text-danger k-invalid-msg" data-for="Status"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TenDangNhap"></label>
+                    <input asp-for="TenDangNhap" class="k-textbox" />
+                    <span asp-validation-for="TenDangNhap" class="text-danger k-invalid-msg" data-for="TenDangNhap"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TongTienDaMua"></label>
+                    <kendo-numerictextbox for="TongTienDaMua" />
+                    <span asp-validation-for="TongTienDaMua" class="text-danger k-invalid-msg" data-for="TongTienDaMua"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TongSoHoaDon"></label>
+                    <kendo-numerictextbox for="TongSoHoaDon" />
+                    <span asp-validation-for="TongSoHoaDon" class="text-danger k-invalid-msg" data-for="TongSoHoaDon"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="k-button k-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index" class="k-button">Back to List</a>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#HoaDonBanModelForm").kendoValidator({
+                // You can define your custom rules here:
+                //rules: {}
+            });
+        })
+    </script>

@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<DoAn.Common.Session.NhanVienSession>(DoAn.Common.Constants.NHANVIEN_SESSION);
+}
+@if (session == null)
+{
+
+}
+else
+{
+    <a href="#" class="dropdown-toggle active" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+        <span class="nv-tendangnhap">Xin chào: @session.UserName</span>
+    </a>
+
+    <div class="user-menu dropdown-menu">
+        <a class="nav-link" href="/TaiKhoanQuanLy/DoiMatKhau"><i class="fa fa- user"></i>Đổi mật khẩu</a>
+        <a class="nav-link" href="/TaiKhoanQuanLy/Logout"><i class="fa fa-power -off"></i>Đăng xuất</a>
+        <a class="nav-link" href="/TaiKhoanQuanLy/ThongTinTaiKhoan"><i class="fa fa-power -off"></i>Thông tin tài khoản</a>
+    </div>
+}

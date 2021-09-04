@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Nhân Viên</title>
+    <link href="https://fonts.googleapis.com/css?family=Dancing+Script|Itim|Lobster|Montserrat:500|Noto+Serif|Nunito|Patrick+Hand|Roboto+Mono:100,100i,300,300i,400,400i,500,500i,700,700i|Roboto+Slab|Saira" rel="stylesheet">
+
+    <link href="~/assets/admin/css/style.css" rel="stylesheet" />
+    <link href="~/assets/nhanvien/style.css" rel="stylesheet" />
+    <!-- Jquery -->
+    <link href="~/assets/nguoidung/css/style.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Serif', serif;
+            line-height: 1.5;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        .user-area .user-menu .nav-link {
+            line-height: 1.5;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        .nv-tendangnhap {
+            font-size: x-large;
+        }
+        .header-nhanvien {
+            background-color: plum;
+        }
+        tr th {
+            font-size: 18px;
+            background-color: plum;
+            color: white;
+        }
+        tr td {
+            background-color: white;
+            font-size: 20px;
+            line-height: 2;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-nhanvien">
+        <div class="container">
+            <header id="header" class="header row">
+                <div class="top-left col-md-3">
+                    <a class="navbar-brand" href="/HomeQuanLy/Index"><img style="max-height: 70px; max-width: 60px; margin: 10px 0;" src="~/assets/nguoidung/img/logo/logo_gongcha.png" alt="Logo"></a>
+                </div>
+                @await Component.InvokeAsync("TenChiNhanh")
+                <div class="top-right col-md-10">
+                    <div class="header-menu">
+
+
+                        <div class="user-area dropdown float-right">
+                            @await Component.InvokeAsync("TenDangNhapQuanLy")
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+        </div>
+    </div>
+
+
+
+    @RenderBody()
+    @RenderSection("locsanpham", required: false)
+    @RenderSection("nhanvienquanly", required: false)
+</body>
+</html>

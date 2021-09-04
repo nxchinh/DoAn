@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Confirm";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+
+<br /><br />
+<div class="alert alert-warning" id="previous" style="text-align: center; height: 150px">
+
+    <strong>Vui lòng click để xác nhận email</strong>
+
+    <br/>
+    <br/>
+    <input id="code" name="code" type="text" placeholder="Nhập mã code"/>
+    <br/>
+    <br/>
+    <input type="submit" id="btnSave" class="btn btn-warning" value="Confirm"/>
+</div>
+<div class="alert alert-success" id="after" style="display:none">
+    <strong><span class="glyphicon glyphicon-ok"></span> Tài khoản của bạn đã được active</strong>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            $.ajax({
+                type: "post",
+                url: "/Login/RegisterConfirm",
+                data: { 'regId': '@ViewBag.regID', 'code': $("#code").val()},
+                success: function (response) {
+                    if (response.success) {
+                        $("#previous").hide();
+                        $("#after").show();
+                        alert(response.responseText);
+                    }
+                    else {
+                        alert(response.responseText);
+                    }
+
+                },
+                error: function(){
+                    alert('error!');
+                }
+            });
+
+        });
+    });
+    //function Verified() {
+
+    //}
+</script>
+
+

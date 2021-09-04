@@ -1,0 +1,328 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+@model DoAn.Models.Model.Admin.NhanVienModel
+<div class="container">
+    <div class="danhsachsanpham">
+        <div>
+            <h4>Danh sách nhân viên</h4>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10 row">
+                <div class="col-md-1"></div>
+                <input type="text" name="txtSearch" placeholder="Tìm kiếm" class="txtSearch form-control col-md-7" />
+                <div class="col-md-2"><button type="button" class="btn btn-warning" id="search">Tìm kiếm</button></div>
+                
+                <div class="col-md-2"></div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="themsanpham" class="btn btn-primary" data-toggle="modal" data-target="#modalsanpham" onclick="clearTextBox()">Thêm mới</button><br /><br />
+            </div>
+        </div>
+
+
+
+        <table class="table table-bordered table-hover" width="100%">
+            <thead>
+                <tr>
+                    <th width="5%">
+                        STT
+                    </th>
+                    <th width="25%">
+                        Họ Tên
+                    </th>
+                    <th width="15%">
+                        Tên đăng nhập
+                    </th>
+                    <th width="20%">
+                        Chi nhánh
+                    </th>
+                    <th width="15%">
+                        Chức vụ
+                    </th>
+                    <th width="15%">
+                        Lương
+                    </th>
+                    <th width="15%">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody"></tbody>
+        </table>
+        <div class="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="load-pagination"></ul>
+            </nav>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+<div class="modal fade " id="modalsanpham" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Thêm nhân viên mới</h4>
+                <button type="button" class="close" id="closemodalsanpham" data-dismiss="modal">×</button>
+
+            </div>
+            <form asp-action="Add" asp-controller="NhanVienAdmin" method="post">
+                <div class="modal-body">
+
+                    <input asp-for="Id" type="text" class="form-control" id="idnhanvien" placeholder="" style="display:none;" />
+                    <div class="form-group row">
+                        <label for="NoiDung" class="col-md-3">Họ tên</label>
+                        <input asp-for="HoTen" type="text" class="form-control col-md-8" id="hotennhanvien" placeholder="Họ tên" />
+                        <div class="col-md-1"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="NoiDung" class="col-md-3">Tên đăng nhập</label>
+                        <input asp-for="TenDangNhap" type="text" class="form-control col-md-8" id="tendangnhapnhanvien" placeholder="Tên đăng nhập" />
+                        <div class="col-md-1"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="Age" class="col-md-3">Chi nhánh</label>
+                        @Html.DropDownListFor(model => model.MaChiNhanh, Model.SelectChiNhanh, "--------Chọn chi nhánh----------", htmlAttributes: new { @class = "form-control col-md-8" })
+                        <div class="col-md-1"></div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="Age" class="col-md-3">Chức vụ</label>
+                        @Html.DropDownListFor(model => model.MaChucVu, Model.SelectChucVu, "--------Chọn chức vụ----------", htmlAttributes: new { @class = "form-control col-md-8" })
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="NoiDung" class="col-md-3">Mật khẩu</label>
+                        <input asp-for="MatKhau" type="text" class="form-control col-md-8" id="tendangnhapnhanvien" placeholder="Tên đăng nhập" />
+                        <div class="col-md-1"></div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="NoiDung" class="col-md-3">Xác nhận</label>
+                        <input asp-for="XacNhanMatKhau" type="text" class="form-control col-md-8" id="tendangnhapnhanvien" placeholder="Tên đăng nhập" />
+                        <div class="col-md-1"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btnclosesanpham">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section nhanvien{
+    <script>
+
+
+        
+
+
+
+        $(document).ready(function (e) {
+
+            loaddata(null,1);
+        });
+        function loaddata(txtSeach, page) {
+
+            $.ajax({
+                url: "/NhanVienAdmin/List",
+                type: "GET",
+                data: { txtSearch: txtSeach, page: page },
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result.data, function (key, item) {
+                        html += '<tr>';
+                        html += '<td width="5%" class="table-center">' + item.STT+ '</td>';
+                        html += '<td width="25%" class="table-center">' + item.HoTen + '</td>';
+                        html += '<td width="25%" class="table-center">' + item.TenDangNhap + '</td>';
+                        html += '<td width="20%" class="table-center">' + item.TenChiNhanh + '</td>';
+                        html += '<td width="20%" class="table-center">' + item.TenChucVu + '</td>';
+                        html += '<td width="15%"  class="table-center">' + item.Luong+ 'đ</td>';
+                        html += '<td width="15%" class="table-center">   <a href="#"  onclick="Delele(' + item.Id + ')">Xóa</a></td>';
+                        html += '</tr>';
+                        var pagination_string = "";
+                        var pageCurrent = result.pageCurrent;
+                        var numSize = result.numSize;
+
+                        //create button previous
+                        if (pageCurrent > 1) {
+                            var pagePrevious = pageCurrent - 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + pagePrevious + '>Previous</a></li>';
+                        }
+
+                        for (i = 1; i <= numSize; i++) {
+                            if (i == pageCurrent) {
+                                pagination_string += '<li class="page-item active"><a href="" class="page-link" data-page=' + i + '>' + pageCurrent + '</a></li>';
+                            } else {
+                                pagination_string += '<li class="page-item"><a href="" class="page-link" data-page=' + i + '>' + i + '</a></li>';
+                            }
+                        }
+
+                        //create button next
+                        if (pageCurrent > 0 && pageCurrent < numSize) {
+                            var pageNext = pageCurrent + 1;
+                            pagination_string += '<li class="page-item"><a href="" class="page-link"  data-page=' + pageNext + '>Next</a></li>';
+                        }
+
+                        //load pagination
+                        $("#load-pagination").html(pagination_string);
+
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        $("body").on("click", ".pagination li a", function (event) {
+            event.preventDefault();
+            var page = $(this).attr('data-page');
+
+            //load event pagination
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, page)
+            }
+            else {
+                loaddata(null, page);
+            }
+
+        });
+        $("#search").click(function () {
+            var txtSearch = $(".txtSearch").val();
+            if (txtSearch != "") {
+                loaddata(txtSearch, 1)
+            }
+            else {
+                loaddata(null, 1);
+            }
+
+        });
+
+       
+        $('#btnAdd').click(function () {
+
+            var machucvu = $("#MaChucVu").find(":selected").val();
+            var machinhanh = $("#MaChiNhanh").find(":selected").val();
+            var res = validate();
+            if (res == false) {
+                return false;
+            }
+            var empObj = {
+                HoTen: $('#hotennhanvien').val(),
+                TenDangNhap: $('#tendangnhapnhanvien').val(),
+                MaChiNhanh: machinhanh,
+                MaChucVu: machucvu,
+            };
+            $.ajax({
+                url: "/NhanVienAdmin/Add",
+                data: JSON.stringify(empObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+
+                    loaddata(null, 1);
+                    alert('Bạn đã thêm mới thành công');
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        });
+
+        
+        function Delele(ID) {
+            var ans = confirm("Bạn có chắc muốn xóa không?");
+            if (ans) {
+                $.ajax({
+                    url: "/NhanVienAdmin/Delete/" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        loaddata(null, 1);
+                        alert('Bạn đã xóa nhân viên thành công');
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function clearTextBox() {
+
+            $('#hotennhanvien').val("");
+            $('#tendangnhapnhanvien').val("");
+            $('#myModalLabel').text('Thêm sản phẩm mới');
+            $('#btnUpdate').hide();
+            $('#btnAdd').show();
+        }
+        //Valdidation using jquery
+        function validate() {
+            var isValid = true;
+            if ($('#hotennhanvien').val()== "") {
+                $('#hotennhanvien').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#hotennhanvien').css('border-color', 'lightgrey');
+            }
+
+
+            if ($('#tendangnhapnhanvien').val() == "") {
+                $('#tendangnhapnhanvien').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#tendangnhapnhanvien').css('border-color', 'lightgrey');
+            }
+
+
+
+            var maloai = $("#MaChucVu").find(":selected").val();
+            if (maloai == "") {
+
+                isValid = false;
+            }
+            else {
+
+            }
+
+            var maloai = $("#MaChiNhanh").find(":selected").val();
+            if (maloai == "") {
+
+                isValid = false;
+            }
+            else {
+
+            }
+
+
+           
+
+            return isValid;
+        }
+    </script>
+
+}
+
+
+

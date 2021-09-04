@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "DangNhapNhanVien";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+}
+
+@model DoAn.Models.Model.NguoiDung.LoginModel
+<section class="login_part section_padding ">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_text text-center">
+                    <div class="login_part_text_iner">
+                        <p>Đăng nhập để vào làm việc</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="login_part_form">
+                    <div class="login_part_form_iner">
+                        <h3>
+
+                            Đăng nhập ngay
+                        </h3>
+                        @using (Html.BeginForm("DangNhapNhanVien", "Login", FormMethod.Post))
+                        {
+                            <form class="row contact_form" action="#" method="post" novalidate="novalidate">
+                                <div class="col-md-12 form-group p_star">
+                                    @Html.TextBoxFor(model => model.Username, new { @class = "form-control ", @autofocus = "autofocus", placeholder = "Tài Khoản" })
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control ", placeholder = "Mật Khẩu" })
+                                </div>
+                                <div class="col-md-12 form-group">
+
+                                    <button type="submit" value="submit" class="btn_3">
+                                        Đăng nhập
+                                    </button>
+                                    <a class="lost_pass" href="/Login/QuenMatKhauNhanVien">forget password?</a>
+                                </div>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

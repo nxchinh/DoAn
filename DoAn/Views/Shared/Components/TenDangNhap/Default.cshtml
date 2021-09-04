@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var session = HttpContextAccessor.HttpContext.Session.GetObjectFromJson<DoAn.Common.Session.UserLogin>(DoAn.Common.Constants.USER_SESSION);
+}
+@if (session == null)
+{
+
+}
+else
+{
+    <li class="d-none d-lg-block">
+        <div class="ten-dn">Hello:@session.UserName</div>
+        <ul class="submenu">
+            <li><a href="/Login/Logout">Đăng xuất</a></li>
+            <li><a href="/Home/ThongTinTaiKhoan">Thông tin tài khoản</a></li>
+            <li><a href="" data-toggle="modal" data-target="#myModal">Phản hồi</a></li>
+        </ul>
+    </li>
+}

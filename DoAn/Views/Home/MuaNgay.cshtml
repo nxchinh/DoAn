@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewBag.Title = "MuaNgay";
+    Layout = "~/Views/Shared/NguoiDung.cshtml";
+    var productTopping = (List<DoAn.Models.EF.SanPham>)ViewBag.Topping;
+    var productDuong = (List<DoAn.Models.EF.SanPham>)ViewBag.Duong;
+    var productDa = (List<DoAn.Models.EF.SanPham>)ViewBag.Da;
+    var productSize = (List<DoAn.Models.EF.SanPham>)ViewBag.Size;
+}
+
+@model DoAn.Models.EF.SanPham
+
+<div class="row">
+    <div class="col-xl-3 col-lg-3 cl-md-3 col-0"></div>
+    <div class="col-xl-6 col-lg-6 cl-md-6 col-12 menu-topping">
+        <!-- Modal Header -->
+        <div class="modal-header row">
+            <div class="col-md-2 col-xl-2 col-lg-2 col-4">
+                <img src="~/images/@Model.Anh" alt="" width="100%">
+            </div>
+
+            <div class="col-md-10 col-xl-10 col-lg-10 col-8">
+                <div class="tentrasua-modal">
+                    <span class="tt-bb">@Model.TenSanPham</span>
+
+                </div>
+                <br>
+                <div class="giatrasua-modal">
+                    <span>Giá: </span>
+                    <span id="gia_modal">@($"{Model.KhuyenMai:0,0}")đ</span>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div class="chonsize">
+                <div class="title">
+                    <span class="tt-bb">CHỌN SIZE</span> <span>( BẮT BUỘC)</span>
+                </div>
+                <br>
+                <div class="content row">
+                    @foreach (var item in productSize)
+                    {
+                        if (item.KhuyenMai == 0)
+                        {
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="radio1">
+                                        <input type="radio" class="form-check-input" id="radio1" name="op_size" value="@item.Id" checked> <span>@item.TenSanPham</span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label" for="radio1">
+                                        <input type="radio" class="form-check-input" id="radio1" name="op_size" value="@item.Id" checked> <span>@item.TenSanPham (+@String.Format("{0:0,0}", item.KhuyenMai)đ)</span>
+                                    </label>
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+
+                </div>
+            </div>
+            <hr>
+            <div class="chonduong">
+                <div class="title">
+                    <span class="tt-bb">CHỌN ĐƯỜNG</span> <span>( BẮT BUỘC)</span>
+                </div>
+                <br>
+                <div class="content row">
+                    @foreach (var item in productDuong)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <label class="form-check-label" for="radio11">
+                                    <input type="radio" class="form-check-input" id="radio11" name="op_duong" value="@item.Id" checked> <span> @item.TenSanPham</span>
+                                </label>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+
+            </div>
+            <hr>
+            <div class="chonda">
+                <div class="title">
+                    <span class="tt-bb">CHỌN ĐÁ</span> <span>( BẮT BUỘC)</span>
+                </div>
+                <br>
+                <div class="content row">
+                    @foreach (var item in productDa)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <label class="form-check-label" for="radio21">
+                                    <input type="radio" class="form-check-input" id="radio21" name="op_da" value="@item.Id" checked>
+                                    <span>
+                                        @item.TenSanPham
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+            <hr>
+            <div class="chontopping">
+                <div class="title">
+                    <span class="tt-bb">CHỌN TOPPING</span>
+                </div>
+                <br>
+                <div class="content row">
+                    @foreach (var item in productTopping)
+                    {
+                        <div class="col-md-6">
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" value="@item.Id" name="ckb_topping">
+                                    @item.TenSanPham-
+                                </label>
+                                <span class="gia-topping">@($"{item.KhuyenMai:0,0}")đ</span>
+
+                            </div>
+                        </div>
+                    }
+
+
+
+                </div>
+            </div>
+        </div>
+        <hr />
+        <!-- Modal footer -->
+        <div class="row">
+            <div class="col-md-3 col-xl-3 col-lg-3 col-2"></div>
+            <div class="col-md-6 col-xl-6 col-lg-6 col-8">
+
+                <button class="btn btn-success btn-chon">Thêm vào giỏ hàng</button>
+            </div>
+            <div class="col-md-3 col-xl-3 col-lg-3 col-2"></div>
+
+
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-3 cl-md-3 col-0"></div>
+
+</div>
+@section danhgiasanpham {
+    <script>
+        $('.btn-chon').click(function(){
+            var mang = [], topping =[], duong=[], da=[], size =[], product=[@Model.Id];
+            $('input[name="ckb_topping"]:checked').each(function (i) {
+                topping[i] = $(this).val();
+            });
+            $('input[name="op_size"]:checked').each(function (i) {
+                size[i] = $(this).val();
+            });
+            $('input[name="op_duong"]:checked').each(function (i) {
+                duong[i] = $(this).val();
+            });
+            $('input[name="op_da"]:checked').each(function (i) {
+                da[i] = $(this).val();
+            });
+            mang = product.concat(size, duong, da, topping);
+            window.location.href = '/Cart/CreateCart?listproduct=' + mang;
+
+        });
+    </script>
+}
+
+
+
+
